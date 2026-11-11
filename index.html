@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#FF6FA3">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Stara Life">
+<title>Stara Life</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&family=Noto+Sans+Arabic:wght@400;500;700&family=Noto+Naskh+Arabic:wght@400;500;700&family=Tajawal:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+/* Layout: minimal flat cards on a calm ground; home shows only a few cards, everything else lives on its own page behind the "more" hub. */
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--fz:1;--ff:Vazirmatn;--bg:#FAF6F8;--dot:#F0E2EA;--s:#fff;--ink:#2B2230;--ol:#2B1B3D;--mu:#8A7C92;--ln:#F1E8EE;--bd:#E4D6DF;--pk:#FF6FA3;--pk2:#FDE6EF;--mt:#7EE0BD;--gr:#16A26F;--gr2:#DDF6EC;--yl:#FFE27A;--lv:#EDE5FF;--bt:#2B1B3D;--sh:rgba(43,27,61,.14);color-scheme:light}
+html{font-size:calc(15px*var(--fz));scroll-padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1E1428;--dot:#33224A;--s:#2A1C3A;--ink:#F6ECF2;--ol:#F4A6C8;--mu:#B9A3BF;--ln:#3A2850;--bd:#52386A;--pk2:#4D2A44;--gr:#4BE0AA;--gr2:#17423A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1E1428;--dot:#33224A;--s:#2A1C3A;--ink:#F6ECF2;--ol:#F4A6C8;--mu:#B9A3BF;--ln:#3A2850;--bd:#52386A;--pk2:#4D2A44;--gr:#4BE0AA;--gr2:#17423A;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background-color:var(--bg);background-image:none;color:var(--ink);font:500 1rem/1.8 var(--ff),Tahoma,sans-serif}
+main{max-width:520px;margin:0 auto;padding:14px max(16px,env(safe-area-inset-left,0px)) 130px max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.ttl{font:800 1.6rem/1.3 var(--ff)}
+h2{margin:0 0 8px;font:700 1.02rem/1.6 var(--ff)}
+.sec{font:700 .8rem/1.4 var(--ff);color:var(--mu);margin:22px 4px 8px}
+p{margin:6px 0}small{color:var(--mu)}
+.card{background:var(--s);border:1px solid var(--ln);border-radius:28px;padding:16px;margin:12px 0 0}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+.b{display:block;border:0;border-radius:999px;padding:9px 12px;font:inherit;font-weight:700;background:linear-gradient(135deg,var(--pk),color-mix(in srgb,var(--pk) 62%,#fff));color:var(--bt);cursor:pointer;width:100%;text-align:center;text-decoration:none}
+.b.g{background:var(--mt)}.b.y{background:var(--yl)}.b.l{background:var(--pk2);color:var(--ink)}.b:active{opacity:.7}
+.in{flex:1;min-width:0;font:inherit;border:1px solid var(--bd);border-radius:12px;padding:8px 12px;background:var(--s);color:var(--ink)}
+textarea{width:100%;font:inherit;border:1px solid var(--bd);border-radius:12px;padding:10px;background:var(--s);color:var(--ink);resize:vertical}
+:focus-visible{outline:2px solid var(--pk);outline-offset:2px}
+.rg{position:relative;width:fit-content;margin:4px auto}.rc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}.rc b{font:800 1.5rem/1.2 var(--ff)}
+.bar{height:10px;border-radius:6px;overflow:hidden;background:var(--ln);margin-top:6px}.bar i{display:block;height:100%;background:var(--pk);border-radius:6px;transition:width .5s}
+.q{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln);cursor:pointer}.q:last-child{border:0}
+.ck{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--bd);display:grid;place-items:center;flex:none;font-weight:800;background:var(--s);cursor:pointer}
+.q.ok .ck{background:var(--mt);border-color:var(--mt);color:var(--bt)}.q.ok span{opacity:.55;text-decoration:line-through}.x{border:0;background:none;color:var(--mu);font-size:1rem;cursor:pointer;padding:4px 8px}
+.md{display:flex;justify-content:space-between;margin-top:6px}.md button{font-size:1.5rem;border:1px solid var(--bd);background:var(--s);border-radius:50%;width:50px;height:50px;cursor:pointer}.md button.on{background:var(--pk2);border-color:var(--pk)}
+.seg{display:flex;gap:8px;margin-top:10px}.seg .b{flex:1}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid .card{margin:0}.tile{cursor:pointer;display:flex;flex-direction:column;gap:2px}.tile .ti{font-size:1.5rem;line-height:1.3}.tile b{font-size:.95rem}.tile small{font-size:.75rem;line-height:1.5}
+.idea{text-align:center;padding:10px;background:var(--ln);color:var(--ink);border-radius:14px;margin:8px 0}
+.ch{display:flex;gap:6px;align-items:flex-end;height:110px;margin-top:6px}.ch>div{flex:1;text-align:center;font-size:.65rem;color:var(--mu)}.ch i{display:block;background:var(--pk);border-radius:6px 6px 0 0;opacity:.55}.ch .hit i{background:var(--mt);opacity:1}
+.lv{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:14px;margin-top:8px;background:var(--s);border:1px solid var(--ln)}
+.lv.cur{background:var(--pk2);border-color:var(--pk)}.lv.dn{background:var(--gr2)}.lv.lk{opacity:.5}.lv .e{font-size:1.5rem;line-height:1.4}.lv>div{flex:1}
+pre{direction:ltr;text-align:left;background:#2B1B3D;color:#8FF0C8;border-radius:12px;padding:12px;overflow-x:auto;font-size:.85rem;line-height:1.6;margin:8px 0}
+.bd{display:inline-block;width:30%;margin:1.5%;text-align:center;font-size:.72rem;padding:8px 2px;border-radius:14px;background:var(--gr2);border:1px solid var(--ln)}.bd b{display:block;font-size:1.5rem}.bd.off{opacity:.35;filter:grayscale(1)}
+.ok{color:var(--gr);font-weight:800}
+nav{position:fixed;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:400px;margin:0 auto;display:flex;align-items:center;background:color-mix(in srgb,var(--s) 85%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--bd);border-radius:999px;box-shadow:0 10px 30px -10px var(--sh);padding:20px 4px 4px;z-index:4}
+nav button{flex:1;border:0;background:none;font:inherit;font-size:0;font-weight:700;color:var(--mu);padding:4px 0;border-radius:16px;cursor:pointer}nav i{display:block;font-style:normal;font-size:1.25rem}nav .on{background:linear-gradient(var(--pk2),color-mix(in srgb,var(--pk) 38%,var(--pk2)));color:var(--ink);font-size:.68rem}
+nav .plus{flex:none;width:46px;height:46px;margin:0 6px;border-radius:50%;background:linear-gradient(135deg,var(--pk),color-mix(in srgb,var(--pk) 55%,var(--mt)));color:var(--bt);font-size:1.4rem;box-shadow:0 8px 18px -4px var(--sh)}
+nav .nvh{position:absolute;top:0;left:50%;transform:translateX(-50%);width:100px;height:22px;padding:0;flex:none;border-radius:0}nav .nvh::before{content:"";position:absolute;left:50%;top:8px;width:40px;height:5px;margin-left:-20px;border-radius:3px;background:var(--bd)}
+.sh{position:fixed;inset:0;z-index:8;pointer-events:none}.sh.on{pointer-events:auto}.sh .bk{position:absolute;inset:0;background:rgba(20,10,30,.4);opacity:0;transition:opacity .25s}.sh.on .bk{opacity:1}
+.sh .pn{position:absolute;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;max-height:84vh;overflow-y:auto;background:var(--bg);border-radius:24px 24px 0 0;padding:6px max(16px,env(safe-area-inset-left,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px));transform:translateY(105%);transition:transform .3s ease;box-shadow:0 -8px 30px rgba(43,27,61,.2)}.sh.on .pn{transform:none}
+.hd2{padding:8px 0 10px;cursor:pointer}.gp{width:44px;height:5px;border-radius:3px;background:var(--bd);margin:0 auto}
+.pin{display:inline-block;font-size:.7rem;color:var(--mu)}
+.ts{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:99px;z-index:6;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.cf{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:7}.cf i{position:absolute;top:-14px;width:9px;height:14px;border-radius:3px;animation:f 2.2s linear forwards}@keyframes f{to{transform:translateY(105vh) rotate(700deg)}}
+.pet{text-align:center;padding:18px 10px 14px;background:linear-gradient(var(--pk2),var(--s));border:1px solid var(--ln);border-radius:22px;cursor:pointer;margin:12px 0 0}
+.pe{line-height:1.25;display:inline-block;transition:font-size .8s;animation:fl 3.4s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-6px)}}
+.pet.bump .pe{animation:pop .8s ease-out}@keyframes pop{0%{transform:scale(.7)}45%{transform:scale(1.3) rotate(-6deg)}100%{transform:scale(1)}}
+.pm{color:var(--mu);font-size:.9rem;margin:2px 0 6px}
+.yr{display:grid;grid-template-columns:44px repeat(31,1fr);gap:4px 2px;align-items:center}.yr small{font-size:.6rem;line-height:1}
+.dt{aspect-ratio:1;border-radius:50%;background:var(--ln);cursor:pointer;min-width:0}.dt.fu{background:none;border:1.5px dashed var(--ln)}.dt.tdy{outline:2.5px solid var(--ol);outline-offset:1px}.dt.nn{visibility:hidden}
+.lg{display:flex;justify-content:space-around;margin-top:12px;text-align:center;font-size:.68rem}.lg i{display:block;width:18px;height:18px;border-radius:50%;margin:0 auto 3px}
+.br{width:110px;height:110px;margin:30px auto;border-radius:50%;background:var(--mt);display:grid;place-items:center;font-size:2rem;animation:bz 14s ease-in-out infinite}@keyframes bz{0%,100%{transform:scale(1)}28%,57%{transform:scale(1.5)}}
+.dots{display:flex;gap:4px;margin-top:4px}.dots i{width:12px;height:12px;border-radius:50%;background:var(--ln)}.dots i.on{background:var(--mt)}
+.brand{font:italic 600 2.7rem/1.1 'Cormorant Garamond',Georgia,serif;letter-spacing:.01em}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.tt{display:flex;flex-direction:column;gap:8px;align-items:stretch;text-align:center;border:1.5px solid var(--bd);border-radius:20px;padding:10px;background:var(--s);color:var(--ink);font:inherit;cursor:pointer}
+.tt.on{outline:2px solid var(--ol);outline-offset:2px}
+.tt .sw{display:flex;justify-content:center;gap:5px;padding:12px 6px;border-radius:14px;border:1px solid}
+.tt .sw i{width:18px;height:18px;border-radius:50%;display:block}
+.tt b{font:italic 600 1.15rem/1.2 'Cormorant Garamond',Georgia,serif}
+.tt small{font-size:.7rem}
+.bento{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;grid-auto-flow:dense}
+.bc{grid-column:span 2;min-width:0}.bc.w1{grid-column:span 1}.bc>*{margin:0!important;height:100%}
+.bc>.card{border:0;position:relative;overflow:hidden}.bc>.card::after{content:var(--mo,"✦");position:absolute;left:10px;bottom:-8px;font-size:3.4rem;opacity:.14;pointer-events:none}
+.bc:nth-child(4n+1)>.card{background:linear-gradient(160deg,var(--pk2),color-mix(in srgb,var(--pk) 32%,var(--s)))}
+.bc:nth-child(4n+2)>.card{background:linear-gradient(160deg,color-mix(in srgb,var(--mt) 45%,var(--s)),color-mix(in srgb,var(--mt) 18%,var(--s)))}
+.bc:nth-child(4n+3)>.card{background:var(--s);border:1px solid var(--ln)}
+.bc:nth-child(4n)>.card{background:linear-gradient(160deg,color-mix(in srgb,var(--yl) 48%,var(--s)),color-mix(in srgb,var(--yl) 16%,var(--s)))}
+.bc .bar{background:color-mix(in srgb,var(--ink) 12%,transparent)}
+.bc .row[style]{height:auto}
+.chips{display:flex;gap:8px;margin:6px 0 2px}.chips span{background:var(--pk2);padding:2px 12px;border-radius:99px;font-size:.78rem;font-weight:700}
+.qt{margin:10px 2px 0;font-style:italic;color:var(--mu);font-size:.9rem}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 40% at 95% 0%,color-mix(in srgb,var(--pk) 38%,transparent),transparent 70%),radial-gradient(50% 35% at 0% 32%,color-mix(in srgb,var(--mt) 32%,transparent),transparent 70%),radial-gradient(60% 40% at 85% 100%,color-mix(in srgb,var(--yl) 26%,transparent),transparent 70%)}
+.hero{padding:22px 20px;border-radius:34px;background:linear-gradient(135deg,var(--pk),color-mix(in srgb,var(--pk) 45%,var(--mt)));color:var(--bt);position:relative;overflow:hidden;margin-bottom:4px;box-shadow:0 18px 34px -20px var(--sh)}
+.hero::after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;left:-50px;bottom:-70px;background:rgba(255,255,255,.3)}
+.hero::before{content:var(--mo,"✦");position:absolute;left:22px;top:6px;font-size:3.4rem;opacity:.35}
+.hero>*{position:relative;z-index:1}.hero small{color:inherit;opacity:.8}.hero .chips span{background:rgba(255,255,255,.5);color:var(--bt)}.hero .x{color:var(--bt)}
+h2::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--pk);margin-inline-end:8px;vertical-align:middle}
+.card{box-shadow:0 1px 0 rgba(255,255,255,.45) inset,0 16px 30px -22px var(--sh)}
+.hd{display:flex;align-items:center;justify-content:space-between}
+.ic,.bk2{width:44px;height:44px;border-radius:50%;border:1px solid var(--bd);background:color-mix(in srgb,var(--s) 80%,transparent);color:var(--ink);font-size:1.15rem;cursor:pointer;display:grid;place-items:center;padding:0}
+.bk2{font-size:1.8rem;line-height:1;padding-bottom:4px}
+.bar2{position:sticky;top:0;z-index:5;padding:6px 0 4px}
+.wm{font:italic 600 1.55rem/1 'Cormorant Garamond',Georgia,serif;letter-spacing:.05em}
+.big{margin:24px 4px 0}.big small{display:block}
+.big h1{margin:2px 0 0;font:800 2.6rem/1.15 var(--ff);letter-spacing:-.01em}
+.big p{margin:6px 0 0;color:var(--mu);font-style:italic}
+.orb{position:relative;width:236px;height:236px;margin:20px auto 8px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--pk) 32%,var(--s)),var(--s) 72%);box-shadow:0 30px 60px -28px var(--sh),0 0 0 10px color-mix(in srgb,var(--pk) 14%,transparent);cursor:pointer}
+.orb svg{position:absolute;inset:8px;width:220px;height:220px}
+.oc{position:relative;text-align:center}.oe{font-size:4.2rem;line-height:1.1}.ot{font-weight:800}
+.chc{justify-content:center;margin-bottom:6px}
+.fl .card{background:transparent;border:1px solid var(--bd);box-shadow:none}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 6px;margin-top:8px}
+.app{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;font:inherit;color:var(--ink);cursor:pointer;padding:0}
+.app .ai{width:62px;height:62px;border-radius:22px;display:grid;place-items:center;font-size:1.7rem;background:linear-gradient(145deg,var(--pk2),color-mix(in srgb,var(--pk) 38%,var(--s)))}
+.app:nth-child(4n+2) .ai{background:linear-gradient(145deg,color-mix(in srgb,var(--mt) 50%,var(--s)),color-mix(in srgb,var(--mt) 20%,var(--s)))}
+.app:nth-child(4n+3) .ai{background:linear-gradient(145deg,color-mix(in srgb,var(--yl) 55%,var(--s)),color-mix(in srgb,var(--yl) 20%,var(--s)))}
+.app:nth-child(4n) .ai{background:linear-gradient(145deg,var(--lv),color-mix(in srgb,var(--lv) 50%,var(--s)))}
+.app small{font-size:.68rem;color:var(--ink);text-align:center;line-height:1.35}
+.hs{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:4px 16px 14px;scrollbar-width:none}.hs::-webkit-scrollbar{display:none}
+.sl{flex:none;width:78%;scroll-snap-align:center}.sl>*{margin:0!important;height:100%}
+main .top .ttl{font-size:2.2rem;letter-spacing:-.01em}
+nav#nv{right:auto;width:auto;max-width:none;margin:0;padding:0;background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:50%;display:block;left:max(18px,env(safe-area-inset-left,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+nav#nv .plus{margin:0;width:60px;height:60px;font-size:1.6rem}
+.bar2{display:flex;gap:8px;align-items:center;margin:0 -16px;padding:8px 16px;background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.bk2{flex:none}
+.strip{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;flex:1;padding:2px}.strip::-webkit-scrollbar{display:none}
+.chp{flex:none;border:1px solid var(--bd);background:var(--s);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
+.chp.on{background:var(--pk);color:var(--bt);border-color:transparent}
+.orb{width:176px;height:176px;margin:14px auto 6px}.orb svg{inset:6px;width:164px;height:164px}.oe{font-size:3rem}
+.big{margin-top:16px}.big h1{font-size:2.2rem}
+.apps{background:color-mix(in srgb,var(--s) 70%,transparent);border:1px solid var(--ln);border-radius:30px;padding:18px 8px;margin-bottom:6px}
+nav#nv{display:flex;align-items:center;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));width:auto;max-width:440px;margin:0 auto;padding:20px 6px 6px;background:color-mix(in srgb,var(--s) 86%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--bd);border-radius:999px;box-shadow:0 14px 34px -12px var(--sh)}
+nav#nv .plus{margin:0 4px;width:52px;height:52px;font-size:1.5rem;flex:none}
+nav#nv button i{display:block;font-style:normal;font-size:1.3rem}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><main id="m"></main><nav id="nv"></nav><div class="sh" id="sh"><div class="bk" data-a="shx"></div><div class="pn" id="pn"></div></div>
+<script>
+(function(){
+var K="qadam1",LINK="intent://tarajalalisina-code.github.io/Lingo/#Intent;scheme=https;package=com.tarajalalisina.lingo;S.browser_fallback_url=https%3A%2F%2Ftarajalalisina-code.github.io%2FLingo%2F;end",LINK2="https://tarajalalisina-code.github.io/Lingo/",$=function(q){return document.querySelector(q)},tab="home",lr=0,cl=-1,draft="",draft2="",bump=0,shOpen=0,S,CONF=["#FF5C9A","#1FB683","#FFC94D","#FF9CC2","#B79CFF"],DCONF=CONF;
+try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
+S=S||{};S.xp=S.xp||0;S.st=S.st||0;S.last=S.last||"";S.d=S.d||{};S.lad=S.lad||0;S.ll=S.ll||[];S.mood=S.mood||{};S.gr=S.gr||{};S.code=S.code||{};S.steps=S.steps||{};S.goal=S.goal||6000;S.tk=S.tk||[];S.tid=S.tid||1;S.dt=S.dt||{};S.chd=S.chd||{};S.th=S.th||0;S.pp=S.pp||0;S.md=S.md||"";S.ae=typeof S.ae==="number"?S.ae:0;
+S.hb=S.hb||[];S.hid=S.hid||1;S.pe=S.pe||[];S.pid=S.pid||1;S.dy=S.dy||{};S.ad=S.ad||{};S.adb=S.adb||{};S.pk=S.pk||"cat";S.pn=S.pn||"";S.ff=S.ff||0;S.fz=S.fz===undefined?1:S.fz;
+var HC=[["pet","همراه من"],["day","نوع امروز"],["mood","حال امروز"],["mission","ماموریت‌های امروز"],["water","آب"],["steps","قدم‌ها"],["tasks","کارها"],["money","پول"],["habits","عادت‌ها"],["people","آدم‌های من"],["adv","ماجراجویی ماه"],["chal","چالش هفته"],["year","سال من"]],
+HD={water:1,steps:1,tasks:1,money:1,habits:1,people:1,adv:1,chal:1,year:1};
+S.hh=S.hh||Object.assign({},HD);
+S.nv=S.nv||["home","tasks","steps","habits"];
+function hcOrder(){var o=(S.hc||[]).filter(function(x){return HC.some(function(h){return h[0]===x})});HC.forEach(function(h){if(o.indexOf(h[0])<0)o.push(h[0])});return o}
+function sv(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+function fa(n){return String(n).replace(/\d/g,function(c){return"۰۱۲۳۴۵۶۷۸۹"[c]})}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function dk(d){return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function td(){return dk(new Date())}
+function kd(k){var a=k.split("-");return new Date(+a[0],a[1]-1,+a[2])}
+function T(){return S.d[td()]=S.d[td()]||{}}
+function lv(){return Math.floor(S.xp/100)+1}
+function toast(s){var e=document.createElement("div");e.className="ts";e.textContent=s;document.body.appendChild(e);setTimeout(function(){e.remove()},2400)}
+function boom(){var f=document.createElement("div");f.className="cf";for(var i=0;i<40;i++){var s=document.createElement("i");s.style.cssText="left:"+Math.random()*100+"%;background:"+CONF[i%5]+";animation-delay:"+Math.random()*.6+"s";f.appendChild(s)}document.body.appendChild(f);setTimeout(function(){f.remove()},3000)}
+function rain(es){var f=document.createElement("div");f.className="cf";for(var i=0;i<24;i++){var s=document.createElement("span");s.textContent=es[i%es.length];s.style.cssText="position:absolute;top:-30px;font-size:"+(16+Math.random()*18)+"px;left:"+Math.random()*100+"%;animation:f "+(2+Math.random())+"s linear forwards;animation-delay:"+Math.random()*.8+"s";f.appendChild(s)}document.body.appendChild(f);setTimeout(function(){f.remove()},3500)}
+function xp(n){var t=td(),y=new Date(),o=lv();y.setDate(y.getDate()-1);if(S.last!==t){S.st=S.last===dk(y)?S.st+1:1;S.last=t}S.xp+=n;bump=1;sv();if(lv()>o){boom();rain(["⭐","🎉","✨"]);toast("🎉 رسیدی به سطح "+fa(lv()))}}
+var LD=[
+["👀","نگاه کوتاه","توی خیابون یا مغازه، به چشم یک نفر نگاه کن، حدود یک ثانیه، بعد نگاهت رو برگردون.","نگاه به ابروها یا بالای بینی هم حساب می‌شه. لازم نیست کامل باشه."],
+["⏱️","نگاه دو-سه‌ثانیه‌ای","به چشم یک آدم غریبه دو تا سه ثانیه نگاه کن. توی ذهنت بشمار: یک، دو، سه.","هدف نگاه طبیعیه، نه زل زدن. اگه سخت بود، کوتاه‌ترش کن."],
+["🙂","نگاه و لبخند کوچیک","با یک نفر (فروشنده، رهگذر) سه ثانیه چشم‌تو‌چشم شو و یه لبخند کوچولو بزن.","لبخند کوچیک کافیه؛ حتی گوشه‌ی لب."],
+["👋","سلام کوتاه","به یک نفر که ازش رد می‌شی (همسایه، نگهبان، فروشنده) سلام کن.","جواب دادن یا ندادنش مهم نیست؛ جرئت سلام کردن مهمه."],
+["🙏","تشکر با نگاه","موقع خرید یا پیاده شدن از ماشین، به چشم طرف نگاه کن و بگو «ممنون».","جمله‌ی کوتاه و واضح، با لحن آروم."],
+["❓","یک سوال ساده","از یک نفر سوال کوچیک بپرس: «ببخشید ساعت چنده؟» یا «این نزدیکی نونوایی هست؟»","سوال‌های ساده بهترین شروع گفت‌وگوئن."],
+["💐","تعریف کوچیک","از یک نفر یه تعریف صادقانه کن، مثلاً «چه کیف قشنگی!»","فقط چیزی بگو که واقعاً حسش می‌کنی."],
+["💬","گفت‌وگوی یک‌دقیقه‌ای","با یک نفر (همکلاسی، فروشنده، همسایه) یه گفت‌وگوی کوتاه حدود یک دقیقه داشته باش.","اگه حرف تموم شد، با لبخند خداحافظی کن؛ این هم یه پیروزیه."],
+["🤝","دعوت دوستانه","به دوستت یا خواهرت پیشنهاد بده با هم قدم بزنید یا چای بخورید.","با آدم‌هایی که دوستشون داری شروع کن؛ امن‌تره."],
+["🎉","آدم‌های تازه","توی یک جمع کوچیک (کلاس، گروه پیاده‌روی، کارگاه) شرکت کن و با یک نفر حرف بزن.","اولین جلسه فقط دیدن و آشنا شدنه."]];
+var CODE=[
+["متغیر: جعبه‌ی اسم‌دار","متغیر مثل یه جعبه‌ست که بهش اسم می‌دی و یه مقدار توش می‌ذاری.","let name = \"Sara\";\nconsole.log(\"Hi \" + name);","خروجی چیه؟",["Hi Sara","Hi name","name"],0,"علامت + متن‌ها رو بهم می‌چسبونه."],
+["محاسبه","جاوااسکریپت مثل ماشین‌حساب حساب می‌کنه: * ضرب، + جمع.","let a = 2;\nlet b = a * 3;\nconsole.log(b);","خروجی چیه؟",["5","6","23"],1,"۲ ضرب در ۳ می‌شه ۶."],
+["شرط: اگه… آنگاه…","با if برنامه تصمیم می‌گیره.","let age = 20;\nif (age >= 18) {\n  console.log(\"adult\");\n} else {\n  console.log(\"kid\");\n}","خروجی چیه؟",["kid","adult","هیچی"],1,"۲۰ از ۱۸ بزرگ‌تره."],
+["حلقه: تکرار","for یه کار رو چند بار تکرار می‌کنه.","for (let i = 1; i <= 3; i++) {\n  console.log(i);\n}","چند بار چاپ می‌شه؟",["۲ بار","۳ بار","۴ بار"],1,"i می‌شه ۱ و ۲ و ۳."],
+["تابع: دستور آماده","تابع یه تکه کده که اسم داره و هر وقت خواستی صداش می‌زنی.","function hello(n) {\n  return \"Hi \" + n;\n}\nconsole.log(hello(\"Ali\"));","خروجی چیه؟",["Hi n","Hi Ali","hello"],1,"n مقدار Ali رو می‌گیره."],
+["آرایه: لیست","آرایه چند مقدار رو توی یه لیست نگه می‌داره. شماره‌ی اولین عضو ۰ هست.","let f = ['a', 'b', 'c'];\nconsole.log(f[1]);","خروجی چیه؟",["a","b","c"],1,"شمارش از ۰ شروع می‌شه، پس f[1] می‌شه b."],
+["آبجکت: کارت اطلاعات","آبجکت چند ویژگی رو با اسم کنار هم نگه می‌داره.","let u = { name: 'Sara', age: 25 };\nconsole.log(u.age);","خروجی چیه؟",["25","Sara","u"],0,"با نقطه به ویژگی می‌رسیم."],
+["map: تبدیل لیست","map روی هر عضو لیست یه کار می‌کنه و لیست تازه می‌سازه.","let a = [1, 2, 3];\nlet b = a.map(x => x * 2);\nconsole.log(b[2]);","خروجی چیه؟",["3","4","6"],2,"عضو سوم ۳ بود و ضرب در ۲ می‌شه ۶."],
+["رشته: کار با متن","متن‌ها هم ابزار آماده دارن، مثل toUpperCase.","let w = 'hi';\nconsole.log(w.toUpperCase());","خروجی چیه؟",["hi","HI","Hi"],1,"toUpperCase همه‌ی حروف رو بزرگ می‌کنه."]];
+var QT=["قدم‌های کوچیک هم راه رو می‌رسونن 🌷","امروز لازم نیست کامل باشی، فقط شروع کن 💗","آروم‌آروم، ولی هر روز 🌿","خودت رو همون‌طور که هستی دوست داشته باش 🌸","هر لبخند کوچیک یه پیروزیه ✨","ابر هم که باشه، آفتاب اون بالاست ☀️","اگه امروز سخت بود، فردا یه فرصت تازه‌ست 🌅","تو از دیروزت جلوتری، همین کافیه 🌱","استراحت هم بخشی از راهه 🛋️","یه کار کوچیک، یه حس بزرگ 🌈","به خودت مهربون باش، مثل یه دوست 💞","هر روز یه دایره‌ی رنگی تازه به سالت اضافه می‌شه 🎨"];
+var WM=["سه چیز صورتی پیدا کن 🌸","پنج نفس عمیق و آروم بکش 🌬️","یه آهنگ شاد گوش بده 🎧","یه چیز قشنگ ببین و بهش لبخند بزن 🙂","یه درخت یا گل رو دقیق نگاه کن 🌳","اگه دلت خواست، به یه نفر لبخند بزن 😊"];
+var DQ=["امروز چه چیز کوچیکی لبخند به لبت آورد؟","امروز از کی یا چی ممنونی؟","امروز چه کاری رو بهتر از انتظارت انجام دادی؟","الان بدنت چه حسی داره؟","امروز چی یاد گرفتی؟","یه لحظه‌ی آروم امروزت چی بود؟","اگه می‌تونستی یه چیز امروز رو عوض کنی، چی بود؟","به کدوم آدم زندگیت بیشتر فکر کردی و چرا؟","امروز چه چیزی باعث شد حس غرور کنی؟","یه چیز قشنگ که امروز دیدی چی بود؟","الان به چی نیاز داری؟","امروز چه چیزی انرژی‌ت رو بالا برد؟","چه چیزی ذهنت رو مشغول کرده؟ بنویسش و بذارش کنار.","یه کار سخت که امروز تونستی انجام بدی چی بود؟","فردا دوست داری چه چیز کوچیکی اتفاق بیفته؟","امروز با خودت چطور رفتار کردی؟","یه چیز ساده که حالت رو خوب می‌کنه چیه؟","امروز کی به تو مهربونی کرد؟","به کدوم ویژگی خودت افتخار می‌کنی؟","یه خاطره‌ی خوب از این هفته بنویس.","امروز چه چیزی رو رها کردی یا می‌خوای رها کنی؟","چه صدا یا بویی امروز بهت حس خوب داد؟","یه قدم کوچیک که امروز به هدفت نزدیک‌تر شدی چی بود؟","اگه امروز یه نمره‌ی مهربونی به خودت بدی، چند می‌شه؟","چه چیزی رو دوست داری بیشتر تو زندگیت داشته باشی؟","امروز کجا احساس آرامش کردی؟","چه حرف نگفته‌ای داری که بنویسیش سبک بشی؟","امروز چه چیزی رو به تعویق انداختی و چرا؟","یه آدم رو نام ببر که دلت می‌خواد ازش خبر بگیری.","امشب قبل از خواب چی رو می‌خوای به خودت بگی؟"];
+var ADV=[["نوروزی","🌸",["با یه دوست یا فامیل که مدتیه ندیدی دیدار کن","یه گل یا سبزه بخر و جایی که می‌بینیش بذار","یه پیاده‌روی ۳۰ دقیقه‌ای توی هوای بهاری برو","یه کار تازه که تا حالا نکردی امتحان کن"]],
+["شکوفه","🌷",["از ۳ شکوفه یا گل عکس بگیر","یه نامه‌ی قدردانی برای یه نفر بنویس","یه صبحانه‌ی بیرون از خونه بخور","سه روز پشت‌سرهم به یه گیاه آب بده"]],
+["نور","🌞",["یه غروب یا طلوع رو کامل تماشا کن","یه نوشیدنی خنک با یه دوست بخور","۱۵ دقیقه صبح توی آفتاب بایست یا قدم بزن","از جای محبوبت یه عکس بگیر"]],
+["خنکی","🍉",["یه دسر تابستونی بخور","با یه نفر بستنی بخور","شب یه قدم کوتاه توی خنکی هوا بزن","یه آهنگ تازه پیدا کن و گوشش بده"]],
+["آرامش","☀️",["یه ساعت بدون گوشی باش","یه فیلم یا انیمیشن قدیمی ببین","یه نامه برای خودت یک سال بعد بنویس","با یه آدم تازه سلام و احوال‌پرسی کن"]],
+["آماده‌ی شروع","🎒",["سه هدف کوچیک برای پاییز بنویس","میزت رو کامل مرتب کن","یه دوره یا آموزش کوتاه رو شروع کن","به یه دوست زنگ بزن و حالش رو بپرس"]],
+["پاییز","🍂",["روی برگ‌های ریخته قدم بزن","یه چای دارچینی یا دمنوش گرم درست کن","یه کتاب تازه شروع کن","یه عکس پاییزی بگیر"]],
+["رنگ‌ها","🍁",["پنج رنگ پاییزی پیدا کن و عکس بگیر","یه سوپ یا آش گرم درست کن","یه فیلم دل‌چسب ببین","از یه نفر که کمکت کرده تشکر کن"]],
+["شب‌های بلند","🌙",["یه شب فیلم یا کتاب با پتو و چای برگزار کن","با خانواده یا دوستات یه دورهمی کوچیک بذار","یه شعر یا متن دوست‌داشتنی بخون","قبل از خواب ۱۰ دقیقه بدون گوشی باش"]],
+["گرما در سرما","❄️",["یه نوشیدنی گرم با یه دوست بخور","یه غذای گرم و خوشمزه بپز","یه پیام مهربون برای یه نفر بفرست","یه ساعت پتو و کتاب یا آهنگ"]],
+["روشنی","✨",["۱۰ دقیقه کشش و حرکات آروم انجام بده","یه آهنگ رو بلند بخون","یه گوشه از خونه رو تمیز کن","یه کار نیک بی‌صدا برای یه نفر انجام بده"]],
+["خونه‌تکونی","🧹",["یه کشو یا قفسه رو مرتب کن","پنج چیز اضافه رو دور بریز یا ببخش","یه گل یا گیاه برای خونه بخر","سه چیز خوب امسال رو بنویس"]]];
+var FNT=[["وزیرمتن","Vazirmatn"],["نوتو سنس","'Noto Sans Arabic'"],["نوتو نسخ","'Noto Naskh Arabic'"],["تجوال","Tajawal"]],FZ=[.9,1,1.12,1.25];
+function lad(){var r='<div class="top"><div class="ttl">نردبان اجتماعی</div></div><div class="card"><h2>پله‌پله</h2><p>قدم‌های کوچیک و آروم، پله‌پله. اگه پله‌ای سخت بود، همون رو دوباره تمرین کن؛ این عقب‌نشینی نیست، تمرینه 💪</p><small>فقط جاهای امن و شلوغ، توی روز. این نردبان رو با روانشناست هم در میون بذار.</small></div>';
+LD.forEach(function(x,i){var cur=i===S.lad,dn=i<S.lad;r+='<div class="lv '+(dn?"dn":cur?"cur":"lk")+'"><span class="e">'+(dn?"✅":cur?x[0]:"🔒")+'</span><div><b>'+fa(i+1)+'. '+x[1]+'</b>'+(cur?'<p style="margin:4px 0">'+x[2]+'</p><small>💡 '+x[3]+'</small>'+(lr?'<p><b>چقدر برات سخت بود؟</b></p><div class="row"><button class="b g" data-a="lrate" data-v="1">😄 راحت</button><button class="b y" data-a="lrate" data-v="2">🙂 قابل‌تحمل</button><button class="b l" data-a="lrate" data-v="3">😅 سخت</button></div>':'<button class="b" data-a="ldone" style="margin-top:8px">انجامش دادم ✅</button>'):"")+'</div></div>'});
+var du=S.pe.filter(function(p){return dueTs(p)<=Date.now()});
+if(S.lad>=3&&S.lad<10&&du.length)r+='<div class="card"><h2>تمرین با آدم‌های من</h2><p>امروز وقتشه به «'+esc(du[0].n)+'» پیام بدی یا زنگ بزنی. این می‌تونه تمرین همین پله باشه 💞</p><button class="b l" data-a="go" data-v="ppl">رفتن به آدم‌های من</button></div>';
+if(S.lad>=10)r+='<div class="card ok">🎉 همه‌ی پله‌ها رو بالا رفتی! حالا هر کدوم رو با آدم‌های تازه تکرار کن.</div>';
+return r}
+function lrate(v){var f=!T().lad;S.ll.push([td(),S.lad,v]);T().lad=1;if(v<3&&S.lad<10){S.lad++;toast("آفرین! پله‌ی بعدی باز شد 🎉")}else toast("عالیه که انجامش دادی! همین پله رو دوباره امتحان کن 🌱");lr=0;xp(f?20:5);boom()}
+function grow(){var r='<div class="top"><div class="ttl">تارینگو و کد</div></div><div class="card"><h2>زبان‌آموزی با تارینگو</h2><p>اسپیکینگ، لغت، جفت‌واژه و ماجراجویی. ده دقیقه‌ی کوتاه هم عالیه.</p><a class="b" href="'+LINK2+'" target="_blank" rel="noopener">باز کردن تارینگو ↗</a><a class="b l" href="'+LINK+'" target="_blank" rel="noopener" style="margin-top:6px">باز کردن در اپ اندروید 📱</a>'+(T().lang?'<p class="ok">✅ امروز تمرین کردی</p>':'<button class="b g" data-a="lang" style="margin-top:8px">امروز تمرین کردم (+۱۰)</button>')+'</div>';
+r+='<div class="card"><h2>کد کوچولو: جاوااسکریپت</h2><p>هر درس دو دقیقه‌ست و آخرش یه سوال داره.</p>';
+CODE.forEach(function(c,i){r+='<button class="b '+(S.code[i]?"g":"l")+'" data-a="cl" data-v="'+i+'" style="margin-top:6px;text-align:right">'+(S.code[i]?"✅ ":"")+fa(i+1)+'. '+c[0]+'</button>';if(cl===i)r+='<p>'+c[1]+'</p><pre>'+esc(c[2])+'</pre><b>'+c[3]+'</b>'+c[4].map(function(o,j){return'<button class="b l" data-a="ca" data-v="'+j+'" style="margin-top:6px">'+esc(o)+'</button>'}).join("")});
+return r+'</div>'}
+function ca(v){var c=CODE[cl];if(v===c[5]){if(!S.code[cl])xp(10);S.code[cl]=1;T().code=1;toast("درسته! "+c[6]);cl=-1}else toast("نزدیک بود، دوباره فکر کن 🙂")}
+function me(){var mx=0,r;Object.keys(S.steps).forEach(function(k){mx=Math.max(mx,S.steps[k])});
+r='<div class="top"><div class="ttl">نشان‌ها</div></div><div class="card"><h2>سطح '+fa(lv())+'</h2><div class="bar"><i style="width:'+S.xp%100+'%"></i></div><small>'+fa(100-S.xp%100)+' امتیاز تا سطح بعد</small></div>';
+r+='<div class="card"><h2>حال این هفته</h2><div class="md">';for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);var m=S.mood[dk(d)];r+='<div style="text-align:center;font-size:.65rem"><div style="font-size:1.5rem">'+(m?["😞","😕","😐","🙂","😄"][m-1]:"·")+'</div>'+d.toLocaleDateString("fa-IR",{weekday:"short"})+'</div>'}r+='</div></div>';
+var gs=Object.keys(S.gr).slice(-5).reverse();r+='<div class="card"><h2>لحظه‌های خوب</h2>'+(gs.length?gs.map(function(k){return'<p>💗 '+esc(S.gr[k])+'</p>'}).join(""):'<small>هنوز چیزی ننوشتی. از «دفتر خاطرات» شروع کن.</small>')+'</div>';
+var B=[["🌱","اولین قدم",S.ll.length>0],["👀","پله‌ی ۳",S.lad>=3],["👋","سلام‌کننده",S.lad>=4],["👟","۱۰ هزار قدم",mx>=10000],["✅","۱۰ کار انجام‌شده",(S.tdn||0)>=10],["💻","۳ درس کد",Object.keys(S.code).length>=3],["🔥","۳ روز پشت‌سرهم",S.st>=3],["🌻","هفته‌ی کامل",S.st>=7],["💧","۸ لیوان آب",(S.wn||0)>=1],["🫧","آرام‌بخش",(S.cd||0)>=3],["📅","۳۰ روز ثبت حال",Object.keys(S.mood).length>=30],["🎯","۵ ایده‌ی شاد",(S.tdn||0)>=5],["🏆","چالش هفته",Object.keys(S.chd).length>=1],["⏱️","۵ جلسه تمرکز",(S.fo||0)>=5],["🎁","جایزه‌بردار",(S.rwc||0)>=1],["💰","۷ روز ثبت خرج",Object.keys(S.d).filter(function(k){return S.d[k].fx||S.d[k].nofx}).length>=7],["🧊","منصرف از هوس",(F().cn||0)>=1],["📖","۷ روز دفتر",Object.keys(S.dy).length>=7],["🔗","عادت ۷ روزه",S.hb.some(function(h){return hch(h)>=7})],["👥","۵ تماس",(S.pc||0)>=5],["🗺️","ماجراجو",Object.keys(S.adb).length>=1]];
+return r+'<div class="card"><h2>نشان‌ها</h2>'+B.map(function(b){return'<div class="bd'+(b[2]?"":" off")+'"><b>'+b[0]+'</b>'+b[1]+'</div>'}).join("")+'</div>'}
+var tsec="w",idea=-1;
+var ID=[["🗨️","به یکی از خانواده‌ات یه پیام صوتی کوتاه بفرست"],["🧁","یه چیز کوچیک بخر و با لبخند از فروشنده تشکر کن"],["🎵","یه آهنگ شاد پیدا کن و ۳ دقیقه برقص"],["📸","از ۳ چیز صورتی یا سبز توی مسیرت عکس بگیر"],["☎️","به دوستت زنگ بزن و حالش رو بپرس"],["🍵","یه چای یا قهوه‌ی خاص برای خودت درست کن و آروم بخور"],["💌","یه یادداشت تشکر برای خواهرت بنویس"],["🌳","یه مسیر جدید برای پیاده‌روی امتحان کن"],["🧠","یه کلمه‌ی جدید از تارینگو یاد بگیر و توی جمله بگو"],["💻","یه خط کد بنویس که اسم خودت رو چاپ کنه"],["🐦","یه دقیقه به یه پرنده یا گربه‌ی خیابونی نگاه کن"],["🎨","یه نقاشی ۵ دقیقه‌ای با رنگ‌های شاد بکش"],["🧹","یه گوشه‌ی کوچیک از اتاقت رو مرتب کن"],["🎁","یه کار کوچیک مهربونانه برای یه نفر انجام بده"],["🤳","یه ویدئوی ۳۰ ثانیه‌ای فقط برای خودت بگیر: امروز چی یاد گرفتم؟"],["🍰","یه خوراکی خوشمزه به خودت جایزه بده"],["📖","۱۰ صفحه از یه کتاب بخون"],["🧘","۱۰ دقیقه کشش و حرکات آروم انجام بده"],["🌇","غروب آفتاب رو تماشا کن"],["🎬","یه فیلم یا انیمیشن قشنگ ببین و نظرت رو بنویس"],["🧺","یه گیاه رو آب بده یا یه گل بخر"],["🍳","یه غذای جدید درست کن"],["🗣️","به زبون تارینگو یه جمله‌ی جدید بلند بگو"],["🚶","با یه نفر که دوست داری ۱۵ دقیقه پیاده‌روی کن"],["📷","از یه گوشه‌ی شهر که قبلاً ندیدی عکس بگیر"],["🎤","یه آهنگ رو بلند بخون، حتی اگه خوب نیست"],["🛍️","از یه مغازه‌ی کوچیک خرید کن و یه جمله باهاش حرف بزن"],["💝","از یه نفر که کمکت کرده تشکر کن"]];
+function stp(){return S.steps[td()]||0}
+function setSteps(n){n=Math.max(0,Math.min(99999,Math.round(n)));S.steps[td()]=n;if(n>=G()&&!T().sg){T().sg=1;xp(15);boom();toast("به هدف قدم‌هات رسیدی! 🎉")}sv()}
+function en(s){return String(s).replace(/[۰-۹]/g,function(c){return"۰۱۲۳۴۵۶۷۸۹".indexOf(c)}).replace(/[٠-٩]/g,function(c){return"٠١٢٣٤٥٦٧٨٩".indexOf(c)}).replace(/[^\d]/g,"")}
+function ring(n,g,z){var c=339.3,f=c*(1-Math.min(1,n/g));return'<svg viewBox="0 0 130 130" width="'+z+'" height="'+z+'"><circle cx="65" cy="65" r="54" fill="none" stroke="var(--ln)" stroke-width="12"/><circle cx="65" cy="65" r="54" fill="none" stroke="var(--pk)" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+c+'" stroke-dashoffset="'+f+'" transform="rotate(-90 65 65)"/></svg>'}
+function opn(w){return S.tk.filter(function(x){return x.w===w&&!x.d}).length}
+function qs(){var t=T(),q=[["🪜","یک قدم نردبان اجتماعی",!!t.lad,"lad"],["👟","رسیدن به هدف قدم‌ها",stp()>=G(),"steps"],["✅","انجام یک کار از لیست",!!t.tk,"tasks"],["🌍","تمرین تارینگو",!!t.lang,"grow"],["💻","یک درس کوچیک کد",!!t.code,"grow"],["📝","سه چیز خوب امروز",!!t.gr,"diary"],["😊","ثبت حال امروز",!!t.mood,"home"],["💧","۸ لیوان آب",(t.wt||0)>=8,"calm"],["🫧","۵ نفس آروم",!!t.calm,"calm"]];if(S.pe.length)q.push(["👥","تماس با یکی از آدم‌هام",!!t.ppl,"ppl"]);return q}
+function chk(){var t=T(),cp=chp();if(cp[1]>=cp[0][2]&&!S.chd[cp[2]]){S.chd[cp[2]]=1;xp(15);boom();toast("چالش هفته تموم شد! 🏆")}if(!t.all&&qs().every(function(q){return q[2]})){t.all=1;xp(20);boom();rain(["🌸","✨","💗"]);toast("همه‌ی ماموریت‌ها تموم شد! 🏆")}}
+function pf(){var Q=qs();return Q.filter(function(q){return q[2]}).length/Q.length}
+function cPet(){var f=pf(),sky=dtp(td())==="sky",m=T().mood,cat=S.pk!=="plant",nm=S.pn||(cat?"گربه":"گیاه"),e,msg,sc,p=lv();
+if(cat){e=sky?"😴":m&&m<=2?"😿":f>=1?"😻":f>=.5?"😸":f>0?"😺":"🐱";msg=sky?"امروز استراحتیم، من هم خوابم می‌بره":m&&m<=2?"کنارتم. امروز فقط یه کار کوچیک کافیه":f>=1?"همه‌ی کارها تموم شد! بهت افتخار می‌کنم":f>=.5?"نصف راه رو رفتی، عالی پیش میری":f>0?"شروع کردی! ادامه بده":"سلام! امروز با هم شروع کنیم؟";sc=4}
+else{var i=f>=1?5:f>=.75?4:f>=.5?3:f>=.25?2:f>0?1:0;e=sky?"🪴":["🌰","🌱","🌿","🌷","🌻","🌳"][i];msg=sky?"امروز استراحت، من هم آفتاب می‌گیرم":m&&m<=2?"یه آفتاب کوچیک هم کافیه، کنارتم":["منتظرم باهم شروع کنیم","جوونه زدم! ممنون","دارم بزرگ می‌شم","شکوفه دادم، ببین!","تقریباً کامل شدم","درخت شدم! آفرین به تو"][i];sc=[2.6,3.2,3.8,4.4,5,5.6][sky?1:i]}
+return'<div class="pet'+(bump?" bump":"")+'" data-a="pat"><div class="pe" style="font-size:'+sc+'rem">'+e+'</div><div><b>'+esc(nm)+'</b></div><div class="pm">'+msg+'</div><div class="bar" style="max-width:220px;margin:0 auto"><i style="width:'+Math.round(f*100)+'%"></i></div><small>سطح '+fa(p)+' · '+fa(S.st)+' روز پشت‌سرهم</small></div>'}
+function dayCard(){var ty=dtp(td()),u=skyUsed();return'<div class="card"><h2>نوع امروز</h2><div class="seg" style="margin-top:0"><button class="b '+(ty?"l":"g")+'" data-a="dt" data-v="">🌤️ عادی</button><button class="b '+(ty==="half"?"y":"l")+'" data-a="dt" data-v="half">✂️ نصفه</button><button class="b '+(ty==="sky"?"y":"l")+'" data-a="dt" data-v="sky">☁️ آسمانی</button></div><small>روز آسمانی این ماه: '+fa(u)+' از ۳'+(ty==="half"?" · هدف قدم و کارها نصفه":"")+'</small></div>'}
+function cMood(){var t=T();return'<div class="card"><h2>حالت چطوره؟</h2><div class="md">'+["😞","😕","😐","🙂","😄"].map(function(e,i){return'<button data-a="mood" data-v="'+(i+1)+'" class="'+(t.mood===i+1?"on":"")+'">'+e+'</button>'}).join("")+'</div>'+(t.mood&&t.mood<=2?'<p>روزهای سخت هم می‌گذره. امروز فقط یه کار کوچیک کافیه 💗</p>':"")+'</div>'}
+function cMission(){if(dtp(td())==="sky")return'<div class="card"><h2>روز آسمانی ☁️</h2><p>امروز هیچ کاری لازم نیست. فقط استراحت کن. فردا برمی‌گردی 💙</p></div>';var Q=qs(),n=Q.filter(function(q){return q[2]}).length;return'<div class="card"><h2>ماموریت‌های امروز</h2><small>'+fa(n)+' از '+fa(Q.length)+'</small><div class="bar"><i style="width:'+n/Q.length*100+'%"></i></div>'+Q.map(function(q){return'<div class="q'+(q[2]?" ok":"")+'" data-a="go" data-v="'+q[3]+'"><div class="ck">'+(q[2]?"✓":"")+'</div><span>'+q[0]+" "+q[1]+'</span></div>'}).join("")+'</div>'}
+function waterCard(){var t=T();return'<div class="card"><h2>آب امروز</h2><div class="row" style="gap:4px">'+[1,2,3,4,5,6,7,8].map(function(i){var on=(t.wt||0)>=i;return'<div class="ck" data-a="water" data-v="'+i+'" style="flex:1;height:36px;border-radius:12px;'+(on?"background:#9AD8FF;border-color:#9AD8FF":"")+'">'+(on?"💧":"")+'</div>'}).join("")+'</div></div>'}
+function cSteps(){return'<div class="card" data-a="go" data-v="steps" style="cursor:pointer"><h2>قدم‌های امروز</h2><div class="rg">'+ring(stp(),G(),110)+'<div class="rc"><b>'+fa(stp())+'</b><small>از '+fa(G())+'</small></div></div></div>'}
+function cTasks(){return'<div class="row" style="margin-top:12px"><button class="b y" data-a="tsec" data-v="w">🏢 سرکار: '+fa(opn("w"))+' کار</button><button class="b g" data-a="tsec" data-v="p">🏡 غیرکاری: '+fa(opn("p"))+' کار</button></div>'}
+function cHabits(){if(!S.hb.length)return'<div class="card" data-a="go" data-v="habits" style="cursor:pointer"><h2>عادت‌ها</h2><small>عادت‌های دلخواهت رو اضافه کن و زنجیره‌شون رو بساز</small></div>';return'<div class="card"><h2>عادت‌ها</h2>'+S.hb.map(function(h){var on=!!h.d[td()],c=hch(h);return'<div class="q'+(on?" ok":"")+'" data-a="htog" data-v="'+h.id+'"><div class="ck">'+(on?"✓":"")+'</div><span style="flex:1">'+h.e+' '+esc(h.t)+'</span><small>🔗 '+fa(c)+'</small></div>'}).join("")+'</div>'}
+function cPeople(){var now=Date.now(),du=S.pe.filter(function(p){return dueTs(p)<=now}).sort(function(a,b){return dueTs(a)-dueTs(b)}).slice(0,3);if(!S.pe.length)return'<div class="card" data-a="go" data-v="ppl" style="cursor:pointer"><h2>آدم‌های من</h2><small>دوست‌ها و خانواده‌ات رو اضافه کن تا یادآوری بشه بهشون سر بزنی</small></div>';return'<div class="card"><h2>آدم‌های من</h2>'+(du.length?du.map(function(p){return'<div class="q" data-a="go" data-v="ppl"><span style="flex:1">⏰ '+esc(p.n)+' <small>'+agoTxt(p)+'</small></span></div>'}).join(""):'<small>همه‌ی آدم‌هات به‌روزن 💚</small>')+'</div>'}
+function cAdv(){var m=jm(new Date()),A=ADV[jpd(new Date()).month-1],o=S.ad[m]||{},n=Object.keys(o).length;return'<div class="card" data-a="go" data-v="adv" style="cursor:pointer"><h2>ماجراجویی '+MN[jpd(new Date()).month-1]+' '+A[1]+'</h2><small>'+A[0]+' · '+fa(n)+' از ۴</small><div class="bar"><i style="width:'+n*25+'%"></i></div></div>'}
+function cYear(){return'<div class="card" data-a="go" data-v="year" style="cursor:pointer"><h2>سال من</h2><small>دایره‌های رنگی روزهای سالت رو ببین</small></div>'}
+function home(){var h=new Date().getHours(),g=h<5||h>=21?"شب بخیر 🌙":h<12?"صبح بخیر ☀️":h<17?"ظهر بخیر 🌤️":"عصر بخیر 🌇",
+F2={pet:cPet,day:dayCard,mood:cMood,mission:cMission,water:waterCard,steps:cSteps,tasks:cTasks,money:finCard,habits:cHabits,people:cPeople,adv:cAdv,chal:chCard,year:cYear},sh=hcOrder().filter(function(id){return!S.hh[id]});
+var r='<div class="top hero"><div><small>'+g+'</small><div class="ttl brand">Stara Life</div><div class="chips"><span>✨ سطح '+fa(lv())+'</span><span>🔥 '+fa(S.st)+' روز</span></div></div><div style="display:flex;gap:2px"><button class="x" data-a="go" data-v="sett" style="font-size:1.4rem" aria-label="تم‌ها">🎨</button><button class="x" data-a="go" data-v="sett" style="font-size:1.4rem" aria-label="تنظیمات">⚙️</button></div></div>';
+r+='<p class="qt">'+QT[new Date().getDate()%QT.length]+'</p><div class="bento">';sh.forEach(function(id){r+='<div class="bc'+({steps:1,money:1,adv:1,chal:1}[id]?' w1':'')+'">'+F2[id]()+'</div>'});r+='</div>';
+if(!sh.length)r+='<div class="card"><small>همه‌ی کارت‌ها مخفی‌ان. از «تنظیمات ← چیدمان امروز» نشونشون بده.</small></div>';
+return r}
+function item(x){return'<div class="q'+(x.d?" ok":"")+'"><div class="ck" data-a="ttog" data-v="'+x.id+'">'+(x.d?"✓":"")+'</div><span style="flex:1" data-a="ttog" data-v="'+x.id+'">'+lab(x)+'</span><button class="x" data-a="tdel" data-v="'+x.id+'">✕</button></div>'}
+function tasks(){var L=S.tk.filter(function(x){return x.w===tsec}),o=L.filter(function(x){return!x.d}),d=L.filter(function(x){return x.d}),w=tsec==="w";
+var r='<div class="top"><div class="ttl">کارهای من</div></div><div class="seg"><button class="b '+(w?"y":"l")+'" data-a="tsec" data-v="w">🏢 سرکار ('+fa(opn("w"))+')</button><button class="b '+(w?"l":"g")+'" data-a="tsec" data-v="p">🏡 غیرکاری ('+fa(opn("p"))+')</button></div>';
+r+='<div class="card"><h2>کار تازه '+(w?"🏢":"🏡")+'</h2><div class="row"><input id="ti" class="in" maxlength="80" placeholder="'+(w?"مثلاً: ارسال گزارش":"مثلاً: زنگ به مامان")+'"><button class="b g" data-a="tadd" style="flex:none;width:64px">➕</button></div><div class="row" style="margin-top:8px"><input id="tq" class="in" inputmode="numeric" placeholder="مقدار (اختیاری)"><select id="tu" class="in"><option>دقیقه</option><option>ساعت</option><option>قدم</option><option>صفحه</option><option>بار</option></select></div><input id="tl" class="in" maxlength="80" style="margin-top:8px;width:100%" placeholder="نسخه‌ی روز نصفه (اختیاری)، مثلاً: فقط مرطوب‌کننده و ضدآفتاب"><label style="display:block;margin-top:8px"><input type="checkbox" id="tr"> 🔁 هر روز تکرار بشه</label><small>برای روز نصفه: یا مقدار بده تا نصف بشه، یا یه نسخه‌ی سبک بنویس.</small></div>';
+r+='<div class="card"><h2>باز</h2>'+(o.length?o.map(item).join(""):'<small>خالیه! یه کار اضافه کن یا از «ایده‌های شاد» یکی بردار 🎲</small>')+'</div>';
+if(d.length)r+='<div class="card"><h2>انجام‌شده ✅</h2>'+d.map(item).join("")+'<button class="b l" data-a="tclr" style="margin-top:8px">پاک کردن انجام‌شده‌ها</button></div>';
+return r}
+function steps(){var n=stp(),mx=S.goal,i,d,v,r;for(i=0;i<7;i++){d=new Date();d.setDate(d.getDate()-i);mx=Math.max(mx,S.steps[dk(d)]||0)}
+r='<div class="top"><div class="ttl">قدم‌ها</div></div><div class="card"><h2>امروز</h2><div class="rg">'+ring(n,G(),170)+'<div class="rc"><b style="font-size:2rem">'+fa(n)+'</b><small>هدف: '+fa(G())+'</small></div></div>'+(n>=G()?'<p class="ok" style="text-align:center">هدفت رو زدی! 🎉</p>':'<p style="text-align:center">'+fa(G()-n)+' قدم تا هدف</p>')+'<div class="row"><button class="b g" data-a="sadd" data-v="500">+۵۰۰</button><button class="b g" data-a="sadd" data-v="1000">+۱۰۰۰</button></div></div>';
+r+='<div class="card"><h2>عدد دقیق</h2><div class="row"><input id="sn" class="in" inputmode="numeric" placeholder="کل قدم‌های امروز"><button class="b" data-a="ssave" style="flex:none;width:72px">ثبت</button></div><div class="row" style="margin-top:8px"><input id="sg" class="in" inputmode="numeric" placeholder="هدف روزانه (الان '+fa(S.goal)+')"><button class="b l" data-a="sgoal" style="flex:none;width:72px">هدف</button></div></div>';
+r+='<div class="card"><h2>هفته‌ی اخیر</h2><div class="ch">';for(i=6;i>=0;i--){d=new Date();d.setDate(d.getDate()-i);v=S.steps[dk(d)]||0;r+='<div class="'+(v>=gd(dk(d))?"hit":"")+'"><i style="height:'+Math.max(4,Math.round(v/mx*90))+'px"></i>'+d.toLocaleDateString("fa-IR",{weekday:"short"})+'</div>'}r+='</div></div>';
+return r}
+var GR=[["روزمره",[["tasks","✅","کارها","سرکار و غیرکاری"],["steps","👟","قدم‌ها","هدف و هفته"],["habits","🔗","عادت‌ها","زنجیره‌ی روزها"],["diary","📖","دفتر خاطرات","سؤال هر روز"]]],
+["آدم‌ها",[["lad","🪜","نردبان اجتماعی","پله‌پله با آدم‌ها"],["ppl","👥","آدم‌های من","یادآور تماس و پیام"]]],
+["رشد",[["grow","🌱","تارینگو و کد","یادگیری"],["fcs","⏱️","تمرکز","تایمر"],["adv","🗺️","ماجراجویی ماه","مأموریت‌های ماهانه"],["fun","🎲","ایده‌های شاد","چرخ شانس"]]],
+["پول",[["pul","💰","پول","بودجه و خرج‌ها"],["debt","🏦","قسط و بدهی","خرج‌های ثابت"]]],
+["حال خوب",[["calm","🫧","تن و روان","آب، تنفس، آرامش"],["goals","🎁","جایزه و چالش","هدف‌های کوچیک"]]],
+["گزارش‌ها",[["year","📅","سال من","دایره‌های سال"],["garden","🌳","باغ سال","هر روز یه گیاه"],["rpt","📊","گزارش","هفته و ماه"],["me","🏅","نشان‌ها","و حال هفته"]]],
+["شخصی",[["pet","🐾","همراه من","گربه یا گیاه"],["sett","🎨","تنظیمات","ظاهر و چیدمان"]]]];
+function allPages(){var a=[["home","🏠","امروز","صفحه‌ی اصلی"]];GR.forEach(function(g){g[1].forEach(function(x){a.push(x)})});return a}
+function sheetBody(){return'<div class="hd2" data-a="shx"><div class="gp"></div></div><div class="top"><div class="ttl">همه‌ی بخش‌ها</div></div>'+GR.map(function(g){return'<div class="sec">'+g[0]+'</div><div class="grid">'+g[1].map(function(x){return'<div class="card tile" data-a="go" data-v="'+x[0]+'"><span class="ti">'+x[1]+'</span><b>'+x[2]+(S.nv.indexOf(x[0])>-1?' <span class="pin">📌</span>':"")+'</b><small>'+x[3]+'</small></div>'}).join("")+'</div>'}).join("")}
+function fun(){var r='<div class="top"><div class="ttl">ایده‌های شاد</div></div><div class="card"><h2>چرخ شانس 🎲</h2><p>یه ماجراجویی کوچولو می‌خوای؟</p>';
+if(idea>=0)r+='<div class="idea"><div style="font-size:3rem">'+ID[idea][0]+'</div><b>'+ID[idea][1]+'</b></div><div class="row"><button class="b g" data-a="iadd">➕ بذارش تو کارهام</button><button class="b y" data-a="ispin">🎲 یکی دیگه</button></div>';
+else r+='<button class="b y" data-a="ispin">🎲 بچرخون</button>';return r+'</div>'}
+function dtp(k){return S.dt[k]||""}
+function gd(k){return dtp(k)==="half"?Math.round(S.goal/2):S.goal}
+function G(){return gd(td())}
+var JF=new Intl.DateTimeFormat("en-u-ca-persian",{year:"numeric",month:"numeric"});
+function jm(d){var o={};JF.formatToParts(d).forEach(function(x){o[x.type]=x.value});return(o.year||o.relatedYear)+"-"+o.month}
+function skyUsed(){var m=jm(new Date()),c=0;Object.keys(S.dt).forEach(function(k){if(S.dt[k]==="sky"){var a=k.split("-");if(jm(new Date(+a[0],a[1]-1,+a[2]))===m)c++}});return c}
+function lab0(x){var h=dtp(td())==="half",q=x.q;if(!h)return esc(x.t)+(q?' <small>('+fa(q)+' '+x.u+')</small>':"");
+if(x.l)return'✂️ '+esc(x.l)+' <small>(به‌جای: '+esc(x.t)+')</small>';
+if(q){var m=x.u==="ساعت"?(q%2?fa(q*30)+" دقیقه":fa(q/2)+" ساعت"):fa(Math.max(1,Math.round(q/2)))+" "+x.u;return esc(x.t)+' <small>✂️ ('+m+' به‌جای '+fa(q)+' '+x.u+')</small>'}
+return esc(x.t)}
+function dst(e,ci){var ty=dtp(dk(e));if(ty==="sky")return' style="background:#9AD8FF"';if(ty==="half")return' style="background:linear-gradient(90deg,'+(ci>=0?PAL[ci]:"#FFB86B")+' 50%,var(--ln) 50%)"';return ci>=0?' style="background:'+PAL[ci]+'"':""}
+var ym="mood",PAL=["#7C83FD","#B79CFF","#FFD84D","#3FD6A0","#FF5C9A"],MN=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
+function yci(d){var k=dk(d),v,o;
+if(ym==="mood"){v=S.mood[k];return v?v-1:-1}
+if(ym==="fin"){var fs0=fsum(k),fb=(F().inc-fix()-F().sv)/30;if(!fs0)return(S.d[k]||{}).nofx?3:-1;return fb>0&&fs0>fb?4:2}
+if(ym==="steps"){v=S.steps[k];if(!v)return-1;v/=gd(k);return v>=1.5?4:v>=1?3:v>=.6?2:v>=.3?1:0}
+o=S.d[k];if(!o)return-1;v=Object.keys(o).filter(function(x){return o[x]===1}).length;return v?Math.min(4,v-1):-1}
+function yinfo(v){var d=new Date(v),k=dk(d),o=S.d[k]||{},x=[];if(S.mood[k])x.push(["😞","😕","😐","🙂","😄"][S.mood[k]-1]);if(S.steps[k])x.push("👟 "+fa(S.steps[k]));if(o.all)x.push("🏆");if(S.dt[k])x.push(S.dt[k]==="sky"?"☁️ آسمانی":"✂️ نصفه");return d.toLocaleDateString("fa-IR",{day:"numeric",month:"long"})+" · "+(x.join(" ")||"بدون ثبت")}
+function year(){var f=new Intl.DateTimeFormat("en-u-ca-persian",{month:"numeric",day:"numeric"}),jp=function(d){var o={};f.formatToParts(d).forEach(function(x){o[x.type]=+x.value});return o},
+n=new Date(),Y=n.getFullYear(),Mo=n.getMonth(),D=n.getDate(),c=0,p=jp(n),M=[[],[],[],[],[],[],[],[],[],[],[],[]],i,d,tm=new Date(Y,Mo,D).getTime(),on=0,g="",L={mood:["😞","😕","😐","🙂","😄"],steps:["زیر ۳۰٪","۳۰٪","۶۰٪","هدف","۱٫۵ برابر"],act:["۱ کار","۲","۳","۴","۵+"],fin:["—","—","در بودجه","بدون خرج","بیشتر"]}[ym];
+while(!(p.month===1&&p.day===1)&&c<400){c++;p=jp(new Date(Y,Mo,D-c))}
+for(i=0;i<366;i++){d=new Date(Y,Mo,D-c+i);p=jp(d);if(i>0&&p.month===1&&p.day===1)break;if(p.month)M[p.month-1].push(d)}
+M.forEach(function(m,j){g+='<small>'+MN[j]+'</small>';for(var q=0;q<31;q++){var e=m[q];if(!e){g+='<span class="dt nn"></span>';continue}var t=e.getTime(),ci=t>tm?-1:yci(e);if(ci>=0)on++;g+='<span class="dt'+(t>tm?" fu":t===tm?" tdy":"")+'" data-a="yd" data-v="'+t+'"'+dst(e,ci)+'></span>'}});
+return'<div class="top"><div class="ttl">سال من</div></div><div class="seg">'+[["mood","😊 حال"],["steps","👟 قدم"],["act","✨ فعالیت"],["fin","💰 پول"]].map(function(x){return'<button class="b '+(ym===x[0]?"y":"l")+'" data-a="ym" data-v="'+x[0]+'">'+x[1]+'</button>'}).join("")+'</div><div class="card"><h2>سال '+(M[0][0]?M[0][0].toLocaleDateString("fa-IR",{year:"numeric"}):"")+'</h2><div class="yr">'+g+'</div><div class="lg">'+PAL.map(function(c,k){return'<div><i style="background:'+c+'"></i>'+L[k]+'</div>'}).join("")+'<div><i style="background:#9AD8FF"></i>☁️ آسمانی</div><div><i style="background:linear-gradient(90deg,#FFB86B 50%,var(--ln) 50%)"></i>✂️ نصفه</div>'+'</div><p style="text-align:center;margin-top:12px">'+fa(on)+' روز رنگی شده 🌈</p><small>روی هر دایره بزن تا دفتر اون روز باز بشه. دایره‌ی حلقه‌دار یعنی امروز.</small></div>'+ydet()+'<button class="b y" data-a="yimg" style="margin-top:16px">📲 ساخت تصویر سال</button>'+(yimg?'<div class="card"><h2>تصویر سال</h2><img src="'+yimg+'" style="width:100%;border-radius:12px"><small>انگشتت رو روی عکس نگه دار تا ذخیره یا ارسالش کنی.</small></div>':"")}
+function calm(){var t=T();return'<div class="top"><div class="ttl">تن و روان</div></div>'+waterCard()+'<div class="card"><h2>تنفس ۴-۴-۶ 🫧</h2><div class="br">🌬️</div><p style="text-align:center">چهار ثانیه نفس بگیر، چهار ثانیه نگه دار، شش ثانیه آروم بده. دایره که بزرگ می‌شه نفس بگیر. ۵ بار تکرار کن.</p>'+(t.calm?'<p class="ok" style="text-align:center">✅ امروز انجام دادی</p>':'<button class="b g" data-a="calm">۵ تا نفس کشیدم (+۳)</button>')+'</div><div class="card"><h2>تمرین ۵-۴-۳-۲-۱ 🌿</h2><p>۵ چیز ببین، ۴ چیز لمس کن، ۳ صدا بشنو، ۲ بو حس کن و ۱ مزه. برای وقتی ذهنت شلوغه.</p></div><div class="card"><h2>ایده‌ی کوچیک امروز</h2><div class="idea">'+WM[new Date().getDate()%WM.length]+'</div></div>'}
+function fm(n){return fa(String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,"٬"))}
+var FC=[["🍔","خوراک"],["🚕","رفت‌وآمد"],["☕","کافه و بیرون"],["🛍️","خرید"],["🎬","تفریح"],["💊","سلامت"],["🏠","خونه"],["📱","قبض و اشتراک"],["🎁","هدیه"],["📦","متفرقه"],["🏦","قسط و بدهی"]];
+function F(){var f=S.fin=S.fin||{inc:0,fx:0,sv:0,ex:[],wl:[],id:1,bank:0,cn:0};f.db=f.db||[];f.rec=f.rec||[];return f}
+function recSum(){return F().rec.reduce(function(a,x){return a+x.a},0)}
+function instSum(){return F().db.reduce(function(a,x){return a+(x.paid<x.tot?Math.min(x.inst,x.tot-x.paid):0)},0)}
+function fix(){return F().fx+recSum()+instSum()}
+function fsum(k){return F().ex.filter(function(x){return x.d===k&&!x.au}).reduce(function(a,x){return a+x.a},0)}
+function autoFin(){var f=F(),n=new Date(),m=jm(n),p=jpd(n),ch=0;
+function at(day){return new Date(n.getFullYear(),n.getMonth(),n.getDate()-(p.day-day))}
+f.rec.forEach(function(r){if(r.last!==m&&p.day>=r.day){var d=at(r.day);f.ex.push({id:f.id++,a:r.a,c:r.c,w:0,au:1,n:r.t+" (ثابت)",d:dk(d),t:d.getTime()});r.last=m;ch=1}});
+f.db.forEach(function(x){if(x.paid<x.tot&&x.last!==m&&p.day>=x.day){var a=Math.min(x.inst,x.tot-x.paid),d=at(x.day);f.ex.push({id:f.id++,a:a,c:10,w:0,au:1,n:x.t+" (قسط)",d:dk(d),t:d.getTime()});x.paid+=a;x.last=m;ch=1}});
+if(ch)sv()}
+function fst(){var f=F(),L=mdays(),n=new Date(),tt=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime(),m=jm(n),left=Math.max(1,L.filter(function(d){return d.getTime()>=tt}).length),sp=f.ex.filter(function(x){return!x.au&&jm(new Date(x.t))===m}),tot=sp.reduce(function(a,x){return a+x.a},0),t0=fsum(td()),room=f.inc-fix()-f.sv,al=Math.max(0,(room-(tot-t0))/left);return{room:room,tot:tot,today:t0,allow:al,left:left,rem:room-tot,sp:sp,tl:al-t0}}
+function finCard(){var f=F();if(!(f.inc>0))return'<div class="card" data-a="go" data-v="pul" style="cursor:pointer"><h2>پول</h2><small>بودجه‌ت رو تنظیم کن تا بدونی روزی چقدر می‌تونی خرج کنی</small></div>';var s=fst();return'<div class="card" data-a="go" data-v="pul" style="cursor:pointer"><h2>پول امروز</h2><p style="text-align:center;font-size:1.25rem"><b>'+(s.tl>=0?fm(s.tl)+" تومان مونده":fm(-s.tl)+" تومان بیشتر از سهم")+'</b></p><small>سهم امروز: '+fm(s.allow)+' · مونده‌ی ماه: '+fm(s.rem)+'</small></div>'}
+function pul(){var f=F(),s=fst(),r='<div class="top"><div class="ttl">پول</div></div>',cat={},tp,msg,wn=0,now=Date.now(),su,tl,v=function(x){return x?' value="'+x+'"':""};
+su='<div class="card"><h2>بودجه‌ی ماهانه (تومان)</h2><input id="fi" class="in" inputmode="numeric" placeholder="درآمد یا پول ماه"'+v(f.inc)+' style="width:100%"><input id="fxx" class="in" inputmode="numeric" placeholder="ثابت‌های دیگه (قسط و خرج ثابت رو از صفحه‌ی «قسط و بدهی» اضافه کن)"'+v(f.fx)+' style="width:100%;margin-top:8px"><input id="fv" class="in" inputmode="numeric" placeholder="پس‌انداز ماهانه (اول از همه کنار می‌ره)"'+v(f.sv)+' style="width:100%;margin-top:8px"><button class="b g" data-a="fset" style="margin-top:8px">ذخیره</button><small>ثابت‌های ماه الان: '+fm(fix())+' تومان</small></div>';
+if(!(f.inc>0))r+=su;else{
+msg=s.room<=0?"ثابت‌ها و پس‌انداز از درآمد بیشتره؛ یه بار عددها رو مرور کن 🌿":s.tl<0?"امروز از سهمت بیشتر شد؛ اشکالی نداره، سهم روزهای بعد کمی کم می‌شه و جبران می‌کنی 💗":s.rem<0?"از بودجه‌ی ماه گذشتی؛ تا آخر ماه فقط خرج‌های ضروری 🌿":"تا اینجا خوب پیش میری 💚";
+r+='<div class="card"><h2>وضعیت</h2><p style="text-align:center;font-size:1.4rem"><b>'+(s.tl>=0?fm(s.tl)+" تومان مونده":fm(-s.tl)+" تومان بیشتر")+'</b><br><small>از سهم امروز ('+fm(s.allow)+')</small></p><div class="bar"><i style="width:'+Math.min(100,Math.max(0,s.tot/Math.max(1,s.room)*100))+'%"></i></div><small>خرج ماه: '+fm(s.tot)+' از '+fm(s.room)+' · '+fa(s.left)+' روز مونده</small><div class="idea">'+msg+'</div></div>'}
+r+='<div class="card"><h2>خرج تازه</h2><input id="fa" class="in" inputmode="numeric" placeholder="چند تومان؟" style="width:100%"><div class="row" style="margin-top:8px"><select id="fc" class="in">'+FC.slice(0,10).map(function(c,j){return'<option value="'+j+'">'+c[0]+' '+c[1]+'</option>'}).join("")+'</select><select id="fw" class="in"><option value="0">ضروری</option><option value="1">هوس</option></select></div><input id="fnt" class="in" maxlength="40" placeholder="یادداشت (اختیاری)" style="width:100%;margin-top:8px"><div class="row" style="margin-top:8px"><button class="b g" data-a="fadd">ثبت</button><button class="b y" data-a="fnf">🙌 امروز خرجی نداشتم</button></div></div>';
+tl=f.ex.filter(function(x){return x.d===td()});
+r+='<div class="card"><h2>امروز</h2>'+(tl.length?tl.map(function(x){return'<div class="q"><span style="flex:1">'+FC[x.c][0]+' '+(x.n?esc(x.n):FC[x.c][1])+(x.w?' <small>هوس</small>':"")+'</span><b>'+fm(x.a)+'</b><button class="x" data-a="fdel" data-v="'+x.id+'">✕</button></div>'}).join(""):'<small>'+(T().nofx?"روز بدون خرج 💚":"هنوز خرجی ثبت نشده.")+'</small>')+'</div>';
+s.sp.forEach(function(x){cat[x.c]=(cat[x.c]||0)+x.a;if(x.w)wn+=x.a});tp=Object.keys(cat).sort(function(a,b){return cat[b]-cat[a]});
+if(tp.length)r+='<div class="card"><h2>پول کجا می‌ره؟</h2>'+tp.map(function(c){return'<p style="margin:8px 0 0">'+FC[c][0]+' '+FC[c][1]+' · '+fm(cat[c])+' <small>('+fa(Math.round(cat[c]/s.tot*100))+'٪)</small></p><div class="bar" style="height:8px"><i style="width:'+cat[c]/cat[tp[0]]*100+'%"></i></div>'}).join("")+'<div class="idea">هوس‌ها: '+fa(Math.round(wn/s.tot*100))+'٪ خرج‌های این ماه</div></div>';
+r+='<div class="card"><h2>لیست صبر ۲۴ ساعته 🧊</h2><small>چیزی که هوس کردی رو اینجا بنویس. اگه فردا هم می‌خواستیش، بخرش.</small>'+f.wl.map(function(x){var h=Math.ceil((x.ts+864e5-now)/36e5);return'<div class="q"><span style="flex:1">'+esc(x.t)+' <small>'+fm(x.a)+'</small></span>'+(h>0?'<small>⏳ '+fa(h)+' ساعت</small>':'<button class="b g" data-a="wbuy" data-v="'+x.id+'" style="width:auto;padding:4px 10px">🛒 می‌خرم</button><button class="b l" data-a="wno" data-v="'+x.id+'" style="width:auto;padding:4px 10px;margin-right:6px">🧊 نمی‌خوامش</button>')+'</div>'}).join("")+'<div class="row" style="margin-top:8px"><input id="wt" class="in" maxlength="50" placeholder="چی می‌خوای؟"><input id="wa" class="in" inputmode="numeric" placeholder="قیمت"><button class="b g" data-a="wadd" style="flex:none;width:56px">➕</button></div></div>';
+r+='<div class="card"><h2>صندوق پس‌انداز 🐷</h2><p style="text-align:center;font-size:1.3rem"><b>'+fm(f.bank)+' تومان</b></p>'+(f.g?'<div class="bar"><i style="width:'+Math.min(100,f.bank/f.g.n*100)+'%"></i></div><small>🎯 '+esc(f.g.t)+': '+fm(f.g.n)+(f.bank>=f.g.n?' ✅':"")+'</small>':"")+'<div class="row" style="margin-top:8px"><input id="bd" class="in" inputmode="numeric" placeholder="مبلغ"><button class="b g" data-a="bdep" style="flex:none;width:60px">➕</button><button class="b l" data-a="bwd" style="flex:none;width:60px">➖</button></div><div class="row" style="margin-top:8px"><input id="bgt" class="in" maxlength="40" placeholder="هدف (مثلاً: گوشی)"><input id="bgn" class="in" inputmode="numeric" placeholder="مبلغ هدف"><button class="b y" data-a="bgoal" style="flex:none;width:56px">🎯</button></div><small>پولی که از خرید هوسی منصرف می‌شی هم اینجا جمع می‌شه.</small></div>';
+r+='<div class="card"><h2>ترفندهای کوچیک</h2><p>۱. اول پس‌انداز رو کنار بذار، بعد خرج کن.</p><p>۲. برای هوس‌ها قانون ۲۴ ساعت صبر.</p><p>۳. قبل از رفتن به فروشگاه لیست بنویس.</p><p>۴. اشتراک‌های کم‌استفاده رو لغو کن.</p><p>۵. هفته‌ای یه بار ۵ دقیقه خرج‌ها رو مرور کن.</p></div>';
+if(f.inc>0)r+=su;return r}
+function debt(){var f=F(),rem=f.db.reduce(function(a,x){return a+(x.tot-x.paid)},0),r='<div class="top"><div class="ttl">قسط و بدهی</div></div>';
+r+='<div class="card"><h2>خلاصه‌ی ماه</h2><p>خرج‌های ثابت: <b>'+fm(recSum())+'</b> تومان</p><p>قسط‌های این ماه: <b>'+fm(instSum())+'</b> تومان</p><p>کل بدهی باقی‌مونده: <b>'+fm(rem)+'</b> تومان</p><small>اینا هر ماه خودکار توی خرج‌ها ثبت می‌شن و از بودجه‌ی روزانه کم می‌شن، پس دوباره حسابشون نکن.</small></div>';
+r+='<div class="card"><h2>خرج‌های ثابت</h2>'+(f.rec.length?f.rec.map(function(x){return'<div class="q"><span style="flex:1">'+FC[x.c][0]+' '+esc(x.t)+' <small>روز '+fa(x.day)+' هر ماه</small></span><b>'+fm(x.a)+'</b><button class="x" data-a="rdel" data-v="'+x.id+'">✕</button></div>'}).join(""):'<small>مثل اجاره، اینترنت، اشتراک‌ها. اضافه کن تا هر ماه خودکار ثبت بشن.</small>')+'<input id="rn" class="in" maxlength="40" placeholder="اسم (مثلاً اجاره)" style="width:100%;margin-top:8px"><div class="row" style="margin-top:8px"><input id="ra" class="in" inputmode="numeric" placeholder="مبلغ (تومان)"><input id="rd" class="in" inputmode="numeric" placeholder="روزِ ماه"></div><div class="row" style="margin-top:8px"><select id="rc" class="in">'+FC.slice(0,10).map(function(c,j){return'<option value="'+j+'"'+(j===7?" selected":"")+'>'+c[0]+' '+c[1]+'</option>'}).join("")+'</select><button class="b g" data-a="radd" style="flex:none;width:72px">➕</button></div></div>';
+r+='<div class="card"><h2>قسط و بدهی</h2>'+(f.db.length?f.db.map(function(x){var left=x.tot-x.paid,mo=x.inst>0?Math.ceil(left/x.inst):0;return'<div style="padding:8px 0;border-bottom:1px solid var(--ln)"><div class="row"><b style="flex:1">'+esc(x.t)+'</b><button class="x" data-a="ddel" data-v="'+x.id+'" style="flex:none">✕</button></div><div class="bar"><i style="width:'+Math.min(100,x.paid/x.tot*100)+'%"></i></div><small>پرداخت‌شده '+fm(x.paid)+' از '+fm(x.tot)+(left>0?' · قسط '+fm(x.inst)+' روز '+fa(x.day)+' · حدود '+fa(mo)+' ماه مونده':' ✅ تموم شد')+'</small>'+(left>0?'<div class="row" style="margin-top:6px"><input id="dp'+x.id+'" class="in" inputmode="numeric" placeholder="پرداخت اضافه"><button class="b l" data-a="dpay" data-v="'+x.id+'" style="flex:none;width:80px">پرداخت</button></div>':"")+'</div>'}).join(""):'<small>وام یا قسط‌هات رو اضافه کن تا هر ماه خودکار کم بشه.</small>')+'<input id="dn" class="in" maxlength="40" placeholder="اسم (مثلاً قسط گوشی)" style="width:100%;margin-top:8px"><div class="row" style="margin-top:8px"><input id="dt" class="in" inputmode="numeric" placeholder="کل مبلغ"><input id="di" class="in" inputmode="numeric" placeholder="مبلغ هر قسط"></div><div class="row" style="margin-top:8px"><input id="dd" class="in" inputmode="numeric" placeholder="روزِ ماه"><input id="dpp" class="in" inputmode="numeric" placeholder="تا حالا پرداخت‌شده"></div><button class="b g" data-a="dadd" style="margin-top:8px">➕ اضافه کردن بدهی</button><small>اگه قسط این ماه رو قبلاً دادی، توی «تا حالا پرداخت‌شده» حسابش کن.</small></div>';
+return r}
+function sc(k){var o=S.d[k]||{};return Object.keys(o).filter(function(x){return o[x]===1}).length}
+var yimg="",ysel=0,rg=7,E=["😞","😕","😐","🙂","😄"],PALS=[["#7C83FD","#B79CFF","#FFD84D","#3FD6A0","#FF5C9A"],["#A5B4FC","#D8B4FE","#FDE68A","#86EFAC","#FDA4AF"],["#4C6EF5","#9C36B5","#F59F00","#40C057","#FA5252"]],
+TH=[["#FF6FA3","#FDE6EF","#4D2A44","#7EE0BD"],["#3FD6A0","#CFF7E8","#17423A","#FF9CC2"],["#B79CFF","#E6DCFF","#3C2F66","#FFD84D"],["#FF9F5C","#FFE0C7","#5B3A22","#7CC6FF"]],
+CH=[["🪜","۳ بار نردبان اجتماعی",3,"lad"],["😊","ثبت حال در ۵ روز",5,"mood"],["💧","۸ لیوان آب در ۴ روز",4,"wd"],["🌍","تمرین تارینگو در ۳ روز",3,"lang"],["👟","رسیدن به هدف قدم در ۳ روز",3,"sg"],["📝","نوشتن سه چیز خوب در ۴ روز",4,"gr"],["🫧","۴ بار تنفس آروم",4,"calm"]];
+var JF2=new Intl.DateTimeFormat("en-u-ca-persian",{month:"numeric",day:"numeric"});
+function jpd(d){var o={};JF2.formatToParts(d).forEach(function(x){o[x.type]=+x.value});return o}
+function lab(x){return(x.r?"🔁 ":"")+lab0(x)}
+function rollover(){var t=td();S.tk.forEach(function(x){if(x.r&&x.d&&x.dd&&x.dd!==t){x.d=0;x.x=0;x.dd=""}})}
+function mx(a,b,t){var o="#",i,v;for(i=0;i<3;i++){v=Math.round(parseInt(a.substr(1+2*i,2),16)*(1-t)+parseInt(b.substr(1+2*i,2),16)*t);o+=("0"+v.toString(16)).slice(-2)}return o}
+function em(e,z){return'url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+z+'" height="'+z+'"><text x="50%" y="55%" font-size="'+z*.38+'" text-anchor="middle" dominant-baseline="middle" opacity=".2">'+e+'</text></svg>')+'")'}
+var PT={none:["none","auto"],dots:["radial-gradient(var(--dot) 1.6px,transparent 1.7px)","20px 20px"],grid:["linear-gradient(var(--dot) 1px,transparent 1px),linear-gradient(90deg,var(--dot) 1px,transparent 1px)","26px 26px"],lines:["repeating-linear-gradient(45deg,var(--dot) 0 2px,transparent 2px 14px)","auto"],check:["conic-gradient(var(--dot) 25%,transparent 0 50%,var(--dot) 0 75%,transparent 0)","36px 36px"],wave:['url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="60" height="24"><path d="M0 12Q15 2 30 12T60 12" fill="none" stroke="#FF5C9A" stroke-width="2" opacity=".22"/></svg>')+'")',"60px 24px"],heart:[em("💗",64),"64px 64px"],star:[em("✨",64),"64px 64px"],flower:[em("🌸",64),"64px 64px"],leaf:[em("🌿",64),"64px 64px"]},
+PN=[["none","🚫 ساده"],["dots","⚪ نقطه"],["grid","▦ شبکه"],["lines","▨ خط‌خطی"],["check","◼️ شطرنجی"],["wave","〰️ موج"],["heart","💗 قلب"],["star","✨ ستاره"],["flower","🌸 گل"],["leaf","🌿 برگ"]],
+BGS=["#FAF6F8","#E9FBF3","#F1ECFF","#FFF1E4","#E8F4FF","#FFF9DB","#F7F7F7","#EEF6E4"];
+function bgCard(){var c=S.bgc||"",p=S.bgp||"none";return'<div class="card"><h2>پس‌زمینه</h2><small>رنگ</small><div class="row" style="gap:8px;flex-wrap:wrap;margin:6px 0"><button data-a="bgc" data-v="" class="b l" style="flex:none;width:38px;height:38px;border-radius:50%;padding:0'+(!c?";outline:2px solid var(--ol);outline-offset:2px":"")+'">↺</button>'+BGS.map(function(x){return'<button data-a="bgc" data-v="'+x+'" aria-label="رنگ" style="flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--bd);cursor:pointer;background:'+x+(c===x?";outline:2px solid var(--ol);outline-offset:2px":"")+'"></button>'}).join("")+'<input type="color" id="bgi" value="'+(c||"#FAF6F8")+'" style="flex:none;width:44px;height:38px;border:0;background:none;padding:0"><button class="b l" data-a="bgcc" style="flex:none;width:auto;padding:4px 10px">اعمال</button></div><small>طرح</small><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">'+PN.map(function(x){return'<button class="b '+(p===x[0]?"y":"l")+'" data-a="bgp" data-v="'+x[0]+'">'+x[1]+'</button>'}).join("")+'</div></div>'}
+function apply0(){var r=document.documentElement,c=TH[S.th||0],dm=S.md==="dark"||(S.md!=="light"&&window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches),m=document.querySelector("meta[name=theme-color]");
+if(S.md)r.dataset.theme=S.md;else r.removeAttribute("data-theme");
+["--pk","--pk2","--mt"].forEach(function(q){r.style.removeProperty(q)});
+if(S.th){r.style.setProperty("--pk",c[0]);r.style.setProperty("--pk2",dm?c[2]:c[1]);r.style.setProperty("--mt",c[3])}
+r.style.setProperty("--ff",FNT[S.ff||0][1]);r.style.setProperty("--fz",FZ[S.fz===undefined?1:S.fz]);
+if(m)m.content=c[0];
+r.style.removeProperty("--bg");r.style.removeProperty("--dot");
+if(S.bgc){var bb=dm?mx(S.bgc,"#1A1026",.86):S.bgc;r.style.setProperty("--bg",bb);r.style.setProperty("--dot",dm?mx(bb,"#ffffff",.1):mx(S.bgc,"#7A5C82",.22))}
+var bd=document.body,P=PT[S.bgp||"none"]||PT.none;if(bd&&bd.style){bd.style.backgroundImage=P[0];bd.style.backgroundSize=P[1]}}
+var AE=[{n:"Vanilla Girl",e:"🍦",fa:"وانیلی و کرم",d:0,bg:"#FBF5E9",s:"#FFFDF8",ink:"#4B3F36",ol:"#A6845F",mu:"#9C8B7A",ln:"#F1E7D6",bd:"#E6D8C1",pk:"#E9C9A0",pk2:"#F7EAD3",mt:"#EBD9B4",gr:"#7A8F5A",gr2:"#EEF1DD",yl:"#F6E3A3",lv:"#EFE6F2",bt:"#4B3F36",sh:"rgba(120,90,50,.28)",pal:["#D9B38C","#E8CFA6","#F1DE9B","#B9C79A","#E3A895"]},
+{n:"Espresso Girl",e:"☕",fa:"قهوه‌ای و لاته",d:1,bg:"#1C1410",s:"#291E18",ink:"#F2E6D8",ol:"#D4A574",mu:"#B39A86",ln:"#382A22",bd:"#4B382C",pk:"#C89B6D",pk2:"#3E2D22",mt:"#B58E66",gr:"#E0B98A",gr2:"#3A2C1F",yl:"#D9B36B",lv:"#3A2F3A",bt:"#1C1410",sh:"rgba(0,0,0,.5)",pal:["#C89B6D","#E0C3A0","#A87B55","#8F9A6B","#D98E73"]},
+{n:"That Girl",e:"🌿",fa:"سبز مریم‌گلی",d:0,bg:"#F3F5EE",s:"#FCFDF9",ink:"#2E392F",ol:"#5E7A55",mu:"#7F8C7C",ln:"#E5EADD",bd:"#D5DECA",pk:"#A3BC95",pk2:"#E3ECD9",mt:"#C6D8B2",gr:"#4F7F4C",gr2:"#E1EEDA",yl:"#F1E4A6",lv:"#E8EDF3",bt:"#2E392F",sh:"rgba(60,90,55,.28)",pal:["#7FA37A","#B4CBA3","#E8D48A","#9DB8C9","#D8A7A0"]},
+{n:"Clean Girl",e:"🤍",fa:"بژ و مینیمال",d:0,bg:"#F7F4EF",s:"#FFFFFF",ink:"#3A3530",ol:"#8B7B6B",mu:"#968C82",ln:"#ECE6DE",bd:"#DDD4C8",pk:"#CDB9A2",pk2:"#EFE7DC",mt:"#DCD2C2",gr:"#6F8A6B",gr2:"#EAEFE6",yl:"#EFE0B5",lv:"#ECE9F0",bt:"#3A3530",sh:"rgba(90,75,60,.24)",pal:["#BFA78C","#D9C8B4","#E8D9A8","#A9B8A2","#D3A9A0"]},
+{n:"Coquette",e:"🎀",fa:"صورتی و پاپیونی",d:0,bg:"#FFF4F6",s:"#FFFFFF",ink:"#5A3B45",ol:"#C9607E",mu:"#A98A94",ln:"#FBE3E8",bd:"#F3CED7",pk:"#F4A9BC",pk2:"#FDE2E8",mt:"#CFE5D6",gr:"#5E9A77",gr2:"#E3F3E8",yl:"#FBE3A6",lv:"#F0E6F7",bt:"#4F2634",sh:"rgba(200,100,130,.3)",pal:["#F28CA6","#F9BCCB","#F6D28B","#A9D6BC","#C7A8E6"]},
+{n:"Matcha Girl",e:"🍵",fa:"ماچا و سبز روشن",d:0,bg:"#EEF2E0",s:"#F9FBF1",ink:"#2D3A20",ol:"#587A2B",mu:"#7A8767",ln:"#E0E8CC",bd:"#CEDAB4",pk:"#A8C46F",pk2:"#DDE8BF",mt:"#C9DE9B",gr:"#4E7A2A",gr2:"#E0EBC8",yl:"#EDE08F",lv:"#E6EBDD",bt:"#2D3A20",sh:"rgba(80,110,40,.28)",pal:["#8DB051","#C2D68F","#EBDC7E","#6FA88A","#D49A8A"]},
+{n:"Lavender Haze",e:"💜",fa:"یاسی و ابری",d:0,bg:"#F5F1FB",s:"#FDFBFF",ink:"#3A3152",ol:"#7B63B8",mu:"#8E86A6",ln:"#E9E2F5",bd:"#D9CEEC",pk:"#B9A5E6",pk2:"#E7DEF7",mt:"#CDE3D8",gr:"#5E9C86",gr2:"#E1F1EA",yl:"#F3E4A5",lv:"#EBE3FA",bt:"#2F2547",sh:"rgba(110,85,170,.28)",pal:["#9C85DA","#C9B9EF","#F0DC95","#9ED3BD","#E8A6C4"]},
+{n:"Cherry Girl",e:"🍒",fa:"آلبالویی و شب",d:1,bg:"#1F0D14",s:"#2D141E",ink:"#FBE9EE",ol:"#F08AA0",mu:"#BE98A4",ln:"#3E1D2A",bd:"#55293A",pk:"#E8627F",pk2:"#4A1E2E",mt:"#F08AA0",gr:"#F5A3B5",gr2:"#3F1A27",yl:"#E9B870",lv:"#3B2340",bt:"#20080F",sh:"rgba(0,0,0,.55)",pal:["#E8627F","#F5A3B5","#E9B870","#B88AC9","#F28B6E"]}];
+function curPal(){var A=AE[S.ae];return A&&!S.pp?A.pal:PALS[S.pp||0]}
+function apply(){apply0();var r=document.documentElement,A=AE[S.ae],m=document.querySelector("meta[name=theme-color]"),st=r.style;
+["--s","--ink","--ol","--mu","--ln","--bd","--gr","--gr2","--yl","--lv","--bt","--sh"].forEach(function(q){st.removeProperty(q)});
+st.colorScheme="";st.removeProperty("--mo");CONF=DCONF;
+if(A){var v={"--s":A.s,"--ink":A.ink,"--ol":A.ol,"--mu":A.mu,"--ln":A.ln,"--bd":A.bd,"--pk":A.pk,"--pk2":A.pk2,"--mt":A.mt,"--gr":A.gr,"--gr2":A.gr2,"--yl":A.yl,"--lv":A.lv,"--bt":A.bt,"--sh":A.sh},k,bb=A.bg;
+for(k in v)st.setProperty(k,v[k]);
+if(S.bgc)bb=A.d?mx(S.bgc,"#1A1026",.86):S.bgc;
+st.setProperty("--bg",bb);st.setProperty("--dot",mx(bb,A.ink,A.d?.1:.09));st.colorScheme=A.d?"dark":"light";CONF=A.pal;st.setProperty("--mo",'"'+A.e+'"');if(m)m.content=A.bg}
+PAL=curPal()}
+function aeCard(){var all=[{n:"Original",e:"🌸",fa:"پیش‌فرض",bg:"#FAF6F8",bd:"#E4D6DF",pk:"#FF6FA3",pk2:"#FDE6EF",mt:"#7EE0BD",ink:"#2B2230"}].concat(AE);
+return'<div class="card"><h2>✨ تم‌های استایل</h2><small>یکی رو انتخاب کن تا رنگ و حال‌وهوای کل اپ عوض بشه</small><div class="tg">'+all.map(function(A,i){var id=i-1;return'<button class="tt'+(S.ae===id?" on":"")+'" data-a="ae" data-v="'+id+'"><span class="sw" style="background:'+A.bg+';border-color:'+A.bd+'"><i style="background:'+A.pk+'"></i><i style="background:'+A.pk2+'"></i><i style="background:'+A.mt+'"></i><i style="background:'+A.ink+'"></i></span><b>'+A.e+' '+A.n+'</b><small>'+A.fa+'</small></button>'}).join("")+'</div></div>'}
+function chp(){var w=Math.floor((Date.now()/864e5+2)/7),c=CH[w%CH.length],n=0,i,d,k,o;for(i=0;i<7;i++){d=new Date();d.setDate(d.getDate()-i);k=dk(d);o=S.d[k]||{};if(c[3]==="mood"?S.mood[k]:o[c[3]])n++}return[c,n,w]}
+function chCard(){var c=chp(),p=Math.min(1,c[1]/c[0][2]);return'<div class="card" data-a="go" data-v="goals" style="cursor:pointer"><h2>چالش هفته</h2><p>'+c[0][0]+' '+c[0][1]+'</p><div class="bar"><i style="width:'+p*100+'%"></i></div><small>'+fa(Math.min(c[1],c[0][2]))+' از '+fa(c[0][2])+(S.chd[c[2]]?" ✅":"")+'</small></div>'}
+function ydet(){if(!ysel)return"";var k=dk(new Date(ysel)),dy=S.dy[k];return'<div class="card"><h2>دفتر این روز</h2><p>'+yinfo(ysel)+'</p>'+(S.gr[k]?'<p>💗 '+esc(S.gr[k])+'</p>':"")+(dy?'<p><small>'+esc(dy.q)+'</small><br>'+esc(dy.a)+'</p>':"")+(!S.gr[k]&&!dy?'<small>یادداشتی برای این روز نیست.</small>':"")+'</div>'}
+function ymonths(){var n=new Date(),Y=n.getFullYear(),Mo=n.getMonth(),D=n.getDate(),c=0,p=jpd(n),M=[[],[],[],[],[],[],[],[],[],[],[],[]],i,d;while(!(p.month===1&&p.day===1)&&c<400){c++;p=jpd(new Date(Y,Mo,D-c))}for(i=0;i<366;i++){d=new Date(Y,Mo,D-c+i);p=jpd(d);if(i>0&&p.month===1&&p.day===1)break;if(p.month)M[p.month-1].push(d)}return M}
+function ybuild(){var M=ymonths(),W=1000,cv=document.createElement("canvas"),x=cv.getContext("2d"),n=new Date(),tm=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime();cv.width=W;cv.height=700;
+var cs=getComputedStyle(document.documentElement),CB=cs.getPropertyValue("--bg").trim()||"#FAF6F8",CI=cs.getPropertyValue("--ink").trim()||"#2B1B3D",CL=cs.getPropertyValue("--ln").trim()||"#F1E8EE",CD=cs.getPropertyValue("--bd").trim()||"#E7C5D6";x.fillStyle=CB;x.fillRect(0,0,W,700);x.fillStyle=CI;x.textAlign="center";x.font="bold 34px Vazirmatn,Tahoma,sans-serif";x.fillText("Stara Life · سال "+(M[0][0]?M[0][0].toLocaleDateString("fa-IR",{year:"numeric"}):""),W/2,56);
+M.forEach(function(m,j){var cy=110+j*45;x.textAlign="right";x.font="bold 20px Vazirmatn,Tahoma,sans-serif";x.fillStyle=CI;x.fillText(MN[j],W-30,cy+7);
+m.forEach(function(e,q){var cx=W-160-q*26,t=e.getTime(),ci=t>tm?-1:yci(e),ty=dtp(dk(e));x.beginPath();x.arc(cx,cy,10,0,7);
+if(t>tm){x.strokeStyle=CD;x.stroke();return}
+if(ty==="sky"){x.fillStyle="#9AD8FF";x.fill();return}
+x.fillStyle=ty==="half"||ci<0?CL:PAL[ci];x.fill();
+if(ty==="half"){x.beginPath();x.arc(cx,cy,10,-1.5708,1.5708);x.fillStyle=ci>=0?PAL[ci]:"#FFB86B";x.fill()}})});
+return cv.toDataURL("image/png")}
+function mdays(){var n=new Date(),Y=n.getFullYear(),M=n.getMonth(),D=n.getDate(),c=0,p=jpd(n),m=p.month,L=[],i,d;while(p.day>1&&c<40){c++;p=jpd(new Date(Y,M,D-c))}for(i=0;i<32;i++){d=new Date(Y,M,D-c+i);if(jpd(d).month!==m)break;L.push(d)}return L}
+function plant(d,tt){var k=dk(d),ty=dtp(k),c=sc(k);if(ty==="sky")return"☁️";if(d.getTime()>tt)return"·";if(ty==="half")return"🌿";return c>=7?"🌳":c>=5?"🌻":c>=3?"🌷":c>=1?"🌱":"·"}
+function garden(){var L=mdays(),n=new Date(),tt=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime(),g="",pl=0,i,e;if(!L.length)return"";
+["ش","ی","د","س","چ","پ","ج"].forEach(function(h){g+='<small style="text-align:center">'+h+'</small>'});
+for(i=0;i<(L[0].getDay()+1)%7;i++)g+='<span></span>';
+L.forEach(function(d,j){e=plant(d,tt);if(e!=="·"&&e!=="☁️")pl++;g+='<div style="text-align:center;font-size:1.5rem;line-height:1.5">'+e+'<small style="display:block;font-size:.6rem">'+fa(j+1)+'</small></div>'});
+return'<div class="top"><div class="ttl">باغ سال</div></div><div class="card"><h2>باغ '+MN[jpd(L[0]).month-1]+'</h2><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px 0">'+g+'</div><p style="text-align:center">'+fa(pl)+' گیاه کاشتی 🌱</p><small>🌱 ۱-۲ کار · 🌷 ۳-۴ · 🌻 ۵-۶ · 🌳 ۷+ · 🌿 روز نصفه · ☁️ آسمانی</small></div>'}
+function rpt(){var sum=0,st=0,best=0,bd=null,mo=[0,0,0,0,0,0],ac=0,sk=0,hf=0,wt=0,i,d,k,s,hi=[],lo=[],a,b,msg,rel="",tm=0;
+for(i=0;i<90;i++){d=new Date();d.setDate(d.getDate()-i);k=dk(d);s=S.steps[k]||0;if(i<rg){if(s){sum+=s;st++;if(s>best){best=s;bd=d}}if(S.mood[k])mo[S.mood[k]]++;if(sc(k)>0||s)ac++;if(dtp(k)==="sky")sk++;if(dtp(k)==="half")hf++;if((S.d[k]||{}).wd)wt++}
+if(s&&S.mood[k]){(S.mood[k]>=4?hi:S.mood[k]<=2?lo:[]).push(s)}}
+for(i=1;i<6;i++)if(mo[i]>mo[tm||1]||(!tm&&mo[i]))tm=i;
+if(hi.length>=3&&lo.length>=3){a=Math.round(hi.reduce(function(x,y){return x+y})/hi.length);b=Math.round(lo.reduce(function(x,y){return x+y})/lo.length);rel='<div class="card"><h2>حال و قدم</h2><p>توی روزهایی که حالت خوب بود (۳ ماه اخیر) میانگین قدم‌هات '+fa(a)+' بود، و توی روزهای سخت‌تر '+fa(b)+'. این فقط یه هم‌زمانیه، نه دلیل قطعی 💗</p></div>'}
+else rel='<div class="card"><h2>حال و قدم</h2><small>با ثبت حال و قدم برای چند روز بیشتر، اینجا رابطه‌شون رو نشونت می‌دم.</small></div>';
+msg=ac>=rg/2?"عالی پیش رفتی 💗":"روزهای ثبت‌نشده هم عیبی نداره، دوباره شروع کن 🌱";
+return'<div class="top"><div class="ttl">گزارش</div></div><div class="seg"><button class="b '+(rg===7?"y":"l")+'" data-a="rg" data-v="7">هفته</button><button class="b '+(rg===30?"y":"l")+'" data-a="rg" data-v="30">ماه</button></div><div class="card"><h2>خلاصه‌ی '+(rg===7?"هفته":"ماه")+'</h2><p>🔥 روز فعال: <b>'+fa(ac)+'</b> از '+fa(rg)+'</p><p>👟 میانگین قدم: <b>'+(st?fa(Math.round(sum/st)):"—")+'</b></p><p>⭐ بهترین روز قدم: <b>'+(bd?bd.toLocaleDateString("fa-IR",{day:"numeric",month:"long"})+" · "+fa(best):"—")+'</b></p><p>🙂 پرتکرارترین حال: <b>'+(tm?E[tm-1]:"—")+'</b></p><p>💧 روزهای ۸ لیوان: <b>'+fa(wt)+'</b></p><p>☁️ آسمانی: '+fa(sk)+' · ✂️ نصفه: '+fa(hf)+'</p><div class="idea">'+msg+'</div></div>'+rel}
+function goals(){var c=chp(),rw=S.rw,pg=rw?Math.min(1,(S.xp-rw.s)/Math.max(1,rw.g-rw.s)):0,r;
+r='<div class="top"><div class="ttl">جایزه و چالش</div></div><div class="card"><h2>چالش این هفته</h2><p>'+c[0][0]+' '+c[0][1]+'</p><div class="bar"><i style="width:'+Math.min(1,c[1]/c[0][2])*100+'%"></i></div><small>'+fa(Math.min(c[1],c[0][2]))+' از '+fa(c[0][2])+'</small>'+(S.chd[c[2]]?'<p class="ok">✅ انجام شد (+۱۵)</p>':"")+'</div>';
+r+='<div class="card"><h2>جایزه‌ی من 🎁</h2>'+(rw?'<p><b>'+esc(rw.t)+'</b></p><div class="bar"><i style="width:'+pg*100+'%"></i></div><small>'+fa(Math.max(0,rw.g-S.xp))+' امتیاز مونده</small>'+(pg>=1?'<button class="b g" data-a="rwclaim" style="margin-top:8px">🎉 جایزه‌م رو بردارم</button>':"")+'<button class="b l" data-a="rwx" style="margin-top:8px">لغو جایزه</button>':'<p>یه جایزه‌ی کوچیک برای خودت تعیین کن و با امتیازهات بازش کن.</p><input id="rt" class="in" maxlength="60" style="width:100%" placeholder="مثلاً: یه قهوه‌ی خوب"><div class="row" style="margin-top:8px"><input id="rx" class="in" inputmode="numeric" placeholder="چند امتیاز؟ مثلاً ۳۰۰"><button class="b g" data-a="rwset" style="flex:none;width:72px">ثبت</button></div>')+'<p><small>جایزه‌های گرفته‌شده: '+fa(S.rwc||0)+'</small></p></div>';return r}
+function fcs(){var run=S.fe>Date.now(),o=S.tk.filter(function(x){return!x.d}),r=Math.max(0,S.fe-Date.now()),m=Math.floor(r/6e4),q=Math.floor(r%6e4/1e3);
+return'<div class="top"><div class="ttl">تمرکز</div></div><div class="card"><h2>جلسه‌ی تمرکز ⏱️</h2>'+(run?'<div class="idea"><div id="tm" style="font:800 3rem var(--ff)">'+fa(("0"+m).slice(-2)+":"+("0"+q).slice(-2))+'</div><b>'+(S.ftk?esc(S.ftk):"تمرکز کن 🎯")+'</b></div><button class="b l" data-a="fx">لغو</button>':'<select id="ft" class="in" style="width:100%;margin-bottom:8px"><option value="">بدون کار مشخص</option>'+o.map(function(x){return'<option>'+esc(x.t)+'</option>'}).join("")+'</select><div class="row"><button class="b g" data-a="fs" data-v="25">۲۵ دقیقه</button><button class="b y" data-a="fs" data-v="15">۱۵</button><button class="b l" data-a="fs" data-v="5">۵</button></div>')+'<p style="text-align:center"><small>امروز: '+fa(T().fo||0)+' جلسه · کل: '+fa(S.fo||0)+'</small></p></div>'}
+function tick(){if(!S.fe)return;var r=S.fe-Date.now();if(r<=0){S.fe=0;S.fo=(S.fo||0)+1;T().fo=(T().fo||0)+1;xp(5);boom();toast("جلسه‌ی تمرکز تموم شد! 🎉");sv();render();return}var e=$("#tm");if(e)e.textContent=fa(("0"+Math.floor(r/6e4)).slice(-2)+":"+("0"+Math.floor(r%6e4/1e3)).slice(-2))}
+function hch(h){var n=0,d=new Date();if(!h.d[dk(d)])d.setDate(d.getDate()-1);while(h.d[dk(d)]){n++;d.setDate(d.getDate()-1)}return n}
+function habits(){var r='<div class="top"><div class="ttl">عادت‌ها</div></div><div class="card"><h2>عادت تازه</h2><div class="row"><select id="he" class="in" style="flex:none;width:70px">'+["⭐","📚","🏃","🧘","💧","🥗","😴","✍️","🎸","🧹"].map(function(e){return'<option>'+e+'</option>'}).join("")+'</select><input id="hn" class="in" maxlength="40" placeholder="مثلاً: مطالعه‌ی ۱۰ دقیقه"><button class="b g" data-a="hadd" style="flex:none;width:60px">➕</button></div><small>هر روز که انجامش بدی، زنجیره یه حلقه بلندتر می‌شه.</small></div>';
+r+=S.hb.length?S.hb.map(function(h){var on=!!h.d[td()],c=hch(h),dots="";for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);dots+='<i class="'+(h.d[dk(d)]?"on":"")+'"></i>'}return'<div class="card"><div class="row"><b style="flex:1">'+h.e+' '+esc(h.t)+'</b><button class="x" data-a="hdel" data-v="'+h.id+'" style="flex:none">✕</button></div><div class="dots">'+dots+'</div><div class="row" style="margin-top:8px"><small style="flex:1">🔗 زنجیره: '+fa(c)+' روز · کل: '+fa(Object.keys(h.d).length)+' روز</small><button class="b '+(on?"g":"l")+'" data-a="htog" data-v="'+h.id+'" style="flex:none;width:auto;padding:6px 14px">'+(on?"✓ امروز انجام شد":"انجامش دادم")+'</button></div></div>'}).join(""):'<div class="card"><small>هنوز عادتی اضافه نکردی.</small></div>';
+return r}
+function dueTs(p){return p.l?p.l+p.e*864e5:0}
+function agoTxt(p){if(!p.l)return"هنوز تماسی ثبت نشده";var d=Math.floor((Date.now()-p.l)/864e5);return d<1?"امروز در تماس بودی":fa(d)+" روز پیش"}
+function ppl(){var L=S.pe.slice().sort(function(a,b){return dueTs(a)-dueTs(b)}),now=Date.now(),r='<div class="top"><div class="ttl">آدم‌های من</div></div>';
+if(T().ppl&&!T().lad&&S.lad>=3&&S.lad<10)r+='<div class="card"><h2>نردبان اجتماعی</h2><p>این تماس می‌تونه تمرین پله‌ی فعلی باشه. می‌خوای ثبتش کنیم؟</p><button class="b" data-a="pl2lad">ثبت به‌عنوان پله‌ی نردبان</button></div>';
+r+='<div class="card"><h2>آدم تازه</h2><input id="pn" class="in" maxlength="30" placeholder="اسم" style="width:100%"><div class="row" style="margin-top:8px"><select id="pr" class="in"><option>خانواده</option><option>دوست</option><option>همکار</option><option>همسایه</option><option>دیگه</option></select><select id="pe" class="in"><option value="3">هر ۳ روز</option><option value="7" selected>هر هفته</option><option value="14">هر دو هفته</option><option value="30">هر ماه</option></select></div><button class="b g" data-a="padd" style="margin-top:8px">➕ اضافه کردن</button><small>وقتی وقتش برسه، توی صفحه‌ی امروز یادآوری می‌شه.</small></div>';
+r+='<div class="card"><h2>یادآورها</h2>'+(L.length?L.map(function(p){var due=dueTs(p)<=now;return'<div class="q" style="cursor:default"><span style="flex:1"><b>'+esc(p.n)+'</b> <small>'+p.r+' · هر '+fa(p.e)+' روز<br>'+agoTxt(p)+(due?" · ⏰ وقتشه":"")+'</small></span><button class="b '+(due?"g":"l")+'" data-a="pdone" data-v="'+p.id+'" style="flex:none;width:auto;padding:5px 10px">✓ در تماس بودم</button><button class="x" data-a="pdel" data-v="'+p.id+'">✕</button></div>'}).join(""):'<small>هنوز کسی رو اضافه نکردی. با نفر اول شروع کن 💗</small>')+'</div>';
+return r}
+function dq(){var d=new Date(),i=Math.floor((new Date(d.getFullYear(),d.getMonth(),d.getDate())-new Date(d.getFullYear(),0,0))/864e5);return DQ[i%DQ.length]}
+function diary(){var cur=S.dy[td()],ks=Object.keys(S.dy).sort(function(a,b){return kd(b)-kd(a)}).filter(function(k){return k!==td()}).slice(0,8);
+var r='<div class="top"><div class="ttl">دفتر خاطرات</div></div><div class="card"><h2>سؤال امروز</h2><p>'+dq()+'</p><textarea id="dyt" rows="4" placeholder="هر چی به ذهنت می‌رسه بنویس">'+esc(draft2||(cur?cur.a:""))+'</textarea><button class="b g" data-a="dysave" style="margin-top:8px">ذخیره</button></div>';
+r+='<div class="card"><h2>سه چیز خوب امروز</h2><textarea id="gt" rows="3" placeholder="مثلاً: چای خوشمزه، آفتاب، پیام دوستم">'+esc(draft||S.gr[td()]||"")+'</textarea><button class="b g" data-a="gsave" style="margin-top:8px">ذخیره</button></div>';
+if(ks.length)r+='<div class="card"><h2>روزهای قبل</h2>'+ks.map(function(k){var e=S.dy[k];return'<div style="padding:8px 0;border-bottom:1px solid var(--ln)"><small>'+kd(k).toLocaleDateString("fa-IR",{day:"numeric",month:"long"})+' · '+esc(e.q)+'</small><p>'+esc(e.a)+'</p></div>'}).join("")+'</div>';
+return r}
+function adv(){var m=jm(new Date()),mo=jpd(new Date()).month,A=ADV[mo-1],o=S.ad[m]||{},n=Object.keys(o).length;
+return'<div class="top"><div class="ttl">ماجراجویی ماه</div></div><div class="card"><h2>'+A[1]+' '+MN[mo-1]+': '+A[0]+'</h2><small>هر مأموریت ۱۰ امتیاز، و بعد از چهارتا ۳۰ امتیاز جایزه‌ی ویژه</small><div class="bar"><i style="width:'+n*25+'%"></i></div>'+A[2].map(function(t,i){return'<div class="q'+(o[i]?" ok":"")+'" data-a="advt" data-v="'+i+'"><div class="ck">'+(o[i]?"✓":"")+'</div><span>'+t+'</span></div>'}).join("")+(S.adb[m]?'<p class="ok">🏆 ماجراجویی این ماه کامل شد!</p>':"")+'</div>'}
+function petPage(){return'<div class="top"><div class="ttl">همراه من</div></div>'+cPet()+'<div class="card"><h2>همراهت کیه؟</h2><div class="seg" style="margin-top:0"><button class="b '+(S.pk!=="plant"?"y":"l")+'" data-a="pk" data-v="cat">🐱 گربه</button><button class="b '+(S.pk==="plant"?"y":"l")+'" data-a="pk" data-v="plant">🌱 گیاه</button></div><div class="row" style="margin-top:10px"><input id="pnm" class="in" maxlength="20" placeholder="یه اسم براش بذار" value="'+esc(S.pn)+'"><button class="b g" data-a="pnsave" style="flex:none;width:72px">ثبت</button></div><small>حالش با کارهایی که امروز انجام می‌دی عوض می‌شه. روش بزن تا نوازشش کنی.</small></div>'}
+function sett(){var hs=hcOrder(),r='<div class="top"><div class="ttl">تنظیمات</div></div>'+aeCard()+'<div class="card"><h2>رنگ اپ کلاسیک</h2><div class="row">'+TH.map(function(c,i){return'<button class="b" data-a="th" data-v="'+i+'" style="background:'+c[0]+(S.th===i?";outline:2px solid var(--ol);outline-offset:2px":"")+'">'+["🌸","🍃","💜","🍊"][i]+'</button>'}).join("")+'</div><div class="row" style="margin-top:12px">'+[["","خودکار"],["light","روشن"],["dark","تاریک"]].map(function(x){return'<button class="b '+(S.md===x[0]?"y":"l")+'" data-a="md" data-v="'+x[0]+'">'+x[1]+'</button>'}).join("")+'</div></div>';
+r+='<div class="card"><h2>فونت</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+FNT.map(function(f,i){return'<button class="b '+(S.ff===i?"y":"l")+'" data-a="ff" data-v="'+i+'" style="font-family:'+f[1]+',Tahoma,sans-serif">'+f[0]+'</button>'}).join("")+'</div><h2 style="margin-top:14px">اندازه‌ی متن</h2><div class="row">'+["کوچیک","معمولی","بزرگ","خیلی بزرگ"].map(function(n,i){return'<button class="b '+(S.fz===i?"y":"l")+'" data-a="fz" data-v="'+i+'" style="padding:9px 2px;font-size:.8rem">'+n+'</button>'}).join("")+'</div></div>';
+r+='<div class="card"><h2>چیدمان صفحه‌ی امروز</h2><small>ترتیب رو عوض کن یا کارت‌هایی که نمی‌خوای رو مخفی کن.</small>'+hs.map(function(id,i){var nm=HC.filter(function(h){return h[0]===id})[0][1],hid=!!S.hh[id];return'<div class="q" style="cursor:default"><span style="flex:1;'+(hid?"opacity:.5":"")+'">'+nm+'</span><button class="x" data-a="lup" data-v="'+id+'"'+(i?"":" disabled")+' aria-label="بالا">▲</button><button class="x" data-a="ldn" data-v="'+id+'"'+(i<hs.length-1?"":" disabled")+' aria-label="پایین">▼</button><button class="b '+(hid?"l":"g")+'" data-a="lhd" data-v="'+id+'" style="flex:none;width:auto;padding:4px 10px">'+(hid?"مخفی":"نمایش")+'</button></div>'}).join("")+'</div>';
+r+='<div class="card"><h2>میان‌بُرهای پایین</h2><small>تا ۴ بخش مهم رو اینجا پین کن. بقیه با کشیدن نوار پایین به بالا باز می‌شن.</small><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">'+allPages().map(function(p){var on=S.nv.indexOf(p[0])>-1;return'<button class="b '+(on?"y":"l")+'" data-a="pin" data-v="'+p[0]+'" style="width:auto;padding:5px 12px">'+p[1]+' '+p[2]+'</button>'}).join("")+'</div></div>';
+r+='<div class="card"><h2>رنگ دایره‌های سال</h2>'+PALS.map(function(p,i){if(i===0&&AE[S.ae])p=AE[S.ae].pal;return'<button class="b '+(S.pp===i?"y":"l")+'" data-a="pp" data-v="'+i+'" style="margin-top:6px">'+p.map(function(c){return'<span style="display:inline-block;width:16px;height:16px;border-radius:50%;margin:0 2px;vertical-align:middle;background:'+c+'"></span>'}).join("")+'</button>'}).join("")+'</div>';
+return r+bgCard()+'<div class="card"><h2>پشتیبان‌گیری</h2><p>این متن همه‌ی اطلاعاته. کپی کن و یه جای امن (مثلاً یادداشت‌ها) نگه دار.</p><textarea id="bkt" rows="3" readonly>'+esc(JSON.stringify(S))+'</textarea><button class="b g" data-a="bk" style="margin-top:8px">📋 کپی</button><p>برای بازگردانی، متن پشتیبان رو اینجا بچسبون:</p><textarea id="rst" rows="3"></textarea><button class="b y" data-a="rs" style="margin-top:8px">♻️ جایگزین کردن اطلاعات فعلی</button></div>'}
+function home2(){var d=new Date(),h=d.getHours(),night=h<5||h>=21,g=night?"شب بخیر":h<12?"صبح بخیر":h<17?"ظهر بخیر":"عصر بخیر",ge=night?"🌙":h<12?"☀️":h<17?"🌤️":"🌇",Q=qs(),n=Q.filter(function(q){return q[2]}).length,f=n/Q.length,sky=dtp(td())==="sky",cat=S.pk!=="plant",
+pe=cat?(sky?"😴":f>=1?"😻":f>=.5?"😸":f>0?"😺":"🐱"):(sky?"🪴":f>=1?"🌳":f>=.75?"🌻":f>=.5?"🌷":f>0?"🌱":"🌰"),
+F2={water:waterCard,steps:cSteps,tasks:cTasks,money:finCard,habits:cHabits,people:cPeople,adv:cAdv,chal:chCard,year:cYear},
+sh=hcOrder().filter(function(id){return!S.hh[id]&&F2[id]}),ap=allPages().filter(function(p){return p[0]!=="home"});
+var r='<div class="hd"><button class="ic" data-a="go" data-v="sett" aria-label="settings">⚙️</button><div class="wm">Stara Life</div><button class="ic" data-a="go" data-v="sett" aria-label="themes">🎨</button></div>';
+r+='<div class="big"><small>'+d.toLocaleDateString("fa-IR",{weekday:"long",day:"numeric",month:"long"})+'</small><h1>'+g+' '+ge+'</h1><p>'+QT[d.getDate()%QT.length]+'</p></div>';
+r+='<div class="fl">'+dayCard()+'</div>';r+='<div class="orb" data-a="pat">'+ring(n,Q.length,220)+'<div class="oc"><div class="oe">'+pe+'</div><div class="ot">'+fa(n)+' از '+fa(Q.length)+'</div><small>ماموریت امروز</small></div></div>';
+r+='<div class="chips chc"><span>✨ سطح '+fa(lv())+'</span><span>🔥 '+fa(S.st)+' روز</span></div>';
+r+='<div class="fl">'+cMood()+'</div><div class="sec">ماموریت‌ها</div><div class="fl">'+cMission()+'</div>';
+r+='<div class="sec">همه‌ی بخش‌ها</div><div class="apps">'+ap.map(function(p){return'<button class="app" data-a="go" data-v="'+p[0]+'"><span class="ai">'+p[1]+'</span><small>'+p[2]+'</small></button>'}).join("")+'</div>';
+if(sh.length)r+='<div class="sec">کاشی‌های امروز</div><div class="hs">'+sh.map(function(id){return'<div class="sl">'+F2[id]()+'</div>'}).join("")+'</div>';
+return r}
+function render(){rollover();autoFin();PAL=curPal();var g=$("#gt");if(g)draft=g.value;var y=$("#dyt");if(y)draft2=y.value;var pins=S.nv.filter(function(k){return allPages().some(function(p){return p[0]===k})}),sub=pins.indexOf(tab)<0&&tab!=="home",pg={home:home2,tasks:tasks,steps:steps,lad:lad,fun:fun,grow:grow,me:me,year:year,calm:calm,garden:garden,rpt:rpt,goals:goals,fcs:fcs,sett:sett,pul:pul,ppl:ppl,diary:diary,habits:habits,adv:adv,debt:debt,pet:petPage}[tab]();
+$("#m").innerHTML=(0?'<div class="bar2"><button class="bk2" data-a="go" data-v="home" aria-label="back">›</button><div class="strip">'+allPages().map(function(p){return'<button class="chp'+(tab===p[0]?" on":"")+'" data-a="go" data-v="'+p[0]+'">'+p[1]+" "+p[2]+'</button>'}).join("")+'</div></div>':"")+(sub&&0?'<button class="b l" data-a="sheet" style="width:auto;display:inline-block;padding:2px 14px">‹ همه‌ی بخش‌ها</button>':"")+pg;bump=0;
+var PM={},h=Math.ceil(pins.length/2),bt=function(k){var p=PM[k];return'<button data-a="go" data-v="'+k+'" class="'+(tab===k?"on":"")+'"><i>'+p[1]+'</i>'+p[2]+'</button>'};
+allPages().forEach(function(p){PM[p[0]]=p});
+$("#nv").innerHTML='<button class="nvh" data-a="sheet" aria-label="more"></button>'+pins.slice(0,h).map(bt).join("")+'<button class="plus" data-a="plus" aria-label="+">➕</button>'+pins.slice(h).map(bt).join("");var _x='<button class="nvh" data-a="sheet" aria-label="همه‌ی بخش‌ها"></button>'+pins.slice(0,h).map(bt).join("")+'<button class="plus" data-a="plus" aria-label="کار تازه">➕</button>'+pins.slice(h).map(bt).join("");
+var _c=document.querySelector(".chp.on");if(_c&&_c.scrollIntoView)_c.scrollIntoView({inline:"center",block:"nearest"});$("#sh").className="sh"+(shOpen?" on":"");$("#pn").innerHTML=sheetBody()}
+function tadd(){var e=$("#ti"),v=e&&e.value.trim();if(v){S.tk.push({id:S.tid++,t:v.slice(0,80),w:tsec,d:0,q:+en($("#tq").value)||0,u:$("#tu").value,l:($("#tl").value||"").trim().slice(0,80),r:$("#tr").checked?1:0});toast("اضافه شد ✨")}}
+document.addEventListener("click",function(e){var b=e.target.closest("[data-a]");if(!b||b.disabled)return;var a=b.dataset.a,v=b.dataset.v,g=$("#gt"),y0=$("#dyt");if(g)draft=g.value;if(y0)draft2=y0.value;
+if(a==="go"){tab=v;shOpen=0;window.scrollTo(0,0)}else if(a==="tsec"){tsec=v;tab="tasks";shOpen=0;window.scrollTo(0,0)}else if(a==="plus"){tab="tasks";shOpen=0}
+else if(a==="sheet")shOpen=1;else if(a==="shx")shOpen=0;
+else if(a==="pin"){var ix=S.nv.indexOf(v);if(ix>-1){if(S.nv.length>2)S.nv.splice(ix,1);else toast("حداقل ۲ میان‌بر لازمه")}else if(S.nv.length>=4)toast("حداکثر ۴ میان‌بر؛ اول یکی رو بردار");else S.nv.push(v)}
+else if(a==="mood"){var t=T();if(!t.mood)xp(3);t.mood=+v;S.mood[td()]=+v}
+else if(a==="gsave"){var x=$("#gt").value.trim();if(x){S.gr[td()]=x;draft="";if(!T().gr){T().gr=1;xp(5)}toast("ذخیره شد 💗")}}
+else if(a==="ldone")lr=1;else if(a==="lrate")lrate(+v);
+else if(a==="lang"){T().lang=1;xp(10);toast("آفرین! ✨")}
+else if(a==="cl")cl=cl===+v?-1:+v;else if(a==="ca")ca(+v);
+else if(a==="tadd")tadd();
+else if(a==="ttog"){var k=S.tk.filter(function(y){return y.id===+v})[0];if(k){k.d=k.d?0:1;if(k.d){T().tk=1;k.dd=td();if(!k.x){k.x=1;S.tdn=(S.tdn||0)+1;xp(k.w==="w"?5:3);toast("آفرین! یه کار کم شد 🎉")}}}}
+else if(a==="tdel")S.tk=S.tk.filter(function(y){return y.id!==+v});
+else if(a==="tclr")S.tk=S.tk.filter(function(y){return!y.d||y.w!==tsec});
+else if(a==="sadd")setSteps(stp()+ +v);
+else if(a==="ssave"){var n=en($("#sn").value);if(n)setSteps(+n)}
+else if(a==="sgoal"){var m=+en($("#sg").value);if(m>=1000)S.goal=Math.min(50000,m)}
+else if(a==="dt"){var kk=td(),ty=v||"";if(ty==="sky"&&S.dt[kk]!=="sky"&&skyUsed()>=3){toast("۳ روز آسمانی این ماه تموم شده ☁️");return}
+if(ty)S.dt[kk]=ty;else delete S.dt[kk];
+if(ty==="sky"){var yy=new Date();yy.setDate(yy.getDate()-1);if(S.last===dk(yy)||S.last===kk)S.last=kk;toast("روز آسمانی! امروز استراحت کن ☁️")}else if(ty==="half")toast("روز نصفه: همه‌چی نصف شد ✂️")}
+else if(a==="ym")ym=v;
+else if(a==="fset"){var f1=F();f1.inc=+en($("#fi").value)||0;f1.fx=+en($("#fxx").value)||0;f1.sv=+en($("#fv").value)||0;toast("بودجه ذخیره شد 💰")}
+else if(a==="fadd"){var f2=F(),am=+en($("#fa").value);if(am>0){f2.ex.push({id:f2.id++,a:am,c:+$("#fc").value,w:+$("#fw").value,n:($("#fnt").value||"").trim().slice(0,40),d:td(),t:Date.now()});if(!T().fx){T().fx=1;xp(2)}toast("ثبت شد ✍️")}}
+else if(a==="fdel"){var f3=F();f3.ex=f3.ex.filter(function(x){return x.id!==+v})}
+else if(a==="fnf"){if(!T().nofx){T().nofx=1;xp(3);toast("روز بدون خرج! 💚")}}
+else if(a==="wadd"){var f4=F(),wa=+en($("#wa").value),wt2=$("#wt").value.trim();if(wt2&&wa>0){f4.wl.push({id:f4.id++,t:wt2.slice(0,50),a:wa,ts:Date.now()});toast("رفت تو لیست صبر 🧊")}}
+else if(a==="wbuy"||a==="wno"){var f5=F(),it=f5.wl.filter(function(x){return x.id===+v})[0];if(it){f5.wl=f5.wl.filter(function(x){return x.id!==it.id});if(a==="wbuy"){f5.ex.push({id:f5.id++,a:it.a,c:3,w:1,n:it.t,d:td(),t:Date.now()});toast("ثبت شد")}else{f5.bank+=it.a;f5.cn=(f5.cn||0)+1;xp(5);toast(fm(it.a)+" تومان نگه داشتی 🧊")}}}
+else if(a==="bdep"||a==="bwd"){var f6=F(),bm=+en($("#bd").value);if(bm>0){f6.bank=Math.max(0,f6.bank+(a==="bdep"?bm:-bm));toast(a==="bdep"?"به صندوق اضافه شد 🐷":"برداشت ثبت شد")}}
+else if(a==="bgoal"){var f7=F(),gn=+en($("#bgn").value);f7.g=gn>0?{t:($("#bgt").value||"هدف من").trim().slice(0,40),n:gn}:null;toast("هدف ثبت شد 🎯")}
+else if(a==="radd"){var rn=$("#rn").value.trim(),ra=+en($("#ra").value),rd=Math.min(31,Math.max(1,+en($("#rd").value)||1));if(rn&&ra>0){F().rec.push({id:F().id++,t:rn.slice(0,40),a:ra,c:+$("#rc").value,day:rd,last:jpd(new Date()).day>rd?jm(new Date()):""});toast("اضافه شد، هر ماه خودکار ثبت می‌شه 🏦")}else toast("اسم و مبلغ رو وارد کن")}
+else if(a==="rdel")F().rec=F().rec.filter(function(x){return x.id!==+v});
+else if(a==="dadd"){var dn=$("#dn").value.trim(),dt=+en($("#dt").value),di=+en($("#di").value),dd=Math.min(31,Math.max(1,+en($("#dd").value)||1)),dpp=Math.min(dt,+en($("#dpp").value)||0);if(dn&&dt>0&&di>0){F().db.push({id:F().id++,t:dn.slice(0,40),tot:dt,inst:di,day:dd,paid:dpp,last:jpd(new Date()).day>dd?jm(new Date()):""});toast("بدهی اضافه شد 🏦")}else toast("اسم، کل مبلغ و مبلغ قسط رو وارد کن")}
+else if(a==="ddel")F().db=F().db.filter(function(x){return x.id!==+v});
+else if(a==="dpay"){var dx=F().db.filter(function(x){return x.id===+v})[0],pa=+en($("#dp"+v).value);if(dx&&pa>0){pa=Math.min(pa,dx.tot-dx.paid);dx.paid+=pa;F().ex.push({id:F().id++,a:pa,c:10,w:0,n:dx.t+" (پرداخت)",d:td(),t:Date.now()});xp(5);toast("پرداخت ثبت شد 💸");if(dx.paid>=dx.tot){boom();rain(["🎉","💚"]);toast("بدهی «"+dx.t+"» تموم شد! 🎉")}}}
+else if(a==="rwset"){var rt=$("#rt").value.trim(),rx=+en($("#rx").value);if(rt&&rx>0){S.rw={t:rt.slice(0,60),s:S.xp,g:S.xp+rx};toast("جایزه تعیین شد 🎁")}}
+else if(a==="rwclaim"){if(S.rw&&S.xp>=S.rw.g){S.rwc=(S.rwc||0)+1;toast("نوش جان! "+S.rw.t+" 🎉");S.rw=null;boom();rain(["🎁","🎉"])}}
+else if(a==="rwx")S.rw=null;
+else if(a==="rg")rg=+v;
+else if(a==="fs"){S.fe=Date.now()+(+v)*60000;S.fm=+v;var fsl=$("#ft");S.ftk=fsl&&fsl.value||""}
+else if(a==="fx")S.fe=0;
+else if(a==="bgc"){S.bgc=v;apply()}else if(a==="bgp"){S.bgp=v;apply()}else if(a==="bgcc"){S.bgc=$("#bgi").value;apply()}
+else if(a==="ae"){S.ae=+v;S.bgc="";apply()}else if(a==="th"){S.th=+v;S.ae=-1;apply()}else if(a==="md"){S.md=v;S.ae=-1;apply()}else if(a==="pp")S.pp=+v;
+else if(a==="ff"){S.ff=+v;apply()}else if(a==="fz"){S.fz=+v;apply()}
+else if(a==="lup"||a==="ldn"){var o=hcOrder(),i=o.indexOf(v);if(a==="lup"&&i>0)o.splice(i-1,0,o.splice(i,1)[0]);if(a==="ldn"&&i>-1&&i<o.length-1)o.splice(i+1,0,o.splice(i,1)[0]);S.hc=o}
+else if(a==="lhd")S.hh[v]=S.hh[v]?0:1;
+else if(a==="pat"){var hs=S.pk==="plant"?["🌿 داره رشد می‌کنه","💧 ممنون که بهم رسیدی","☀️ چه روز خوبیه"]:["خرخر 💗","😻 دوستت دارم","💞 مرسی که هستی"];toast(hs[Math.floor(Math.random()*hs.length)]);rain([S.pk==="plant"?"🌸":"💗"])}
+else if(a==="pk")S.pk=v;else if(a==="pnsave"){S.pn=($("#pnm").value||"").trim().slice(0,20);toast("ثبت شد 💗")}
+else if(a==="hadd"){var hn=$("#hn").value.trim();if(hn){S.hb.push({id:S.hid++,t:hn.slice(0,40),e:$("#he").value,d:{}});toast("عادت تازه اضافه شد 🔗")}}
+else if(a==="htog"){var h=S.hb.filter(function(y){return y.id===+v})[0];if(h){var hk=td();if(h.d[hk])delete h.d[hk];else{h.d[hk]=1;xp(3);var hc=hch(h);toast(hc>1?"زنجیره‌ت "+fa(hc)+" روزه شد 🔗":"ثبت شد 🔗");if([7,30,100].indexOf(hc)>-1){xp(10);boom();rain(["🔥","⭐","🔗"]);toast("زنجیره‌ی "+fa(hc)+" روزه! 🔥")}}}}
+else if(a==="hdel")S.hb=S.hb.filter(function(y){return y.id!==+v});
+else if(a==="padd"){var pn=$("#pn").value.trim();if(pn){S.pe.push({id:S.pid++,n:pn.slice(0,30),r:$("#pr").value,e:+$("#pe").value,l:0});toast("اضافه شد 👥")}}
+else if(a==="pdone"){var pp=S.pe.filter(function(y){return y.id===+v})[0];if(pp){pp.l=Date.now();T().ppl=1;S.pc=(S.pc||0)+1;xp(5);toast("عالیه که سر زدی 💞");rain(["💞"])}}
+else if(a==="pdel")S.pe=S.pe.filter(function(y){return y.id!==+v});
+else if(a==="pl2lad"){tab="lad";lr=1;window.scrollTo(0,0)}
+else if(a==="dysave"){var dx2=$("#dyt").value.trim();if(dx2){S.dy[td()]={q:dq(),a:dx2};draft2="";if(!T().dy){T().dy=1;xp(5)}toast("ثبت شد 📖")}}
+else if(a==="advt"){var am2=jm(new Date()),ao=S.ad[am2]=S.ad[am2]||{};if(ao[v])delete ao[v];else{ao[v]=1;xp(10);toast("مأموریت انجام شد 🗺️");if(Object.keys(ao).length>=4&&!S.adb[am2]){S.adb[am2]=1;xp(30);boom();rain(["🗺️","🏆","✨"]);toast("ماجراجویی این ماه کامل شد! 🏆")}}}
+else if(a==="bk"){var bta=$("#bkt");if(bta){bta.select();try{navigator.clipboard.writeText(bta.value)}catch(e){}try{document.execCommand("copy")}catch(e){}toast("کپی شد 📋")}return}
+else if(a==="rs"){try{var bo=JSON.parse($("#rst").value);if(bo&&typeof bo==="object"&&typeof bo.xp==="number"){localStorage.setItem(K,JSON.stringify(bo));toast("بازگردانی شد ✅");setTimeout(function(){location.reload()},700)}else toast("متن پشتیبان درست نیست")}catch(e){toast("متن پشتیبان درست نیست")}return}
+else if(a==="yimg"){PAL=curPal();yimg=ybuild()}else if(a==="yd")ysel=+v;
+else if(a==="calm"){if(!T().calm){T().calm=1;S.cd=(S.cd||0)+1;xp(3);toast("آفرین، آروم‌تر شدی 🫧")}}
+else if(a==="water"){var t2=T(),k2=+v;t2.wt=t2.wt===k2?k2-1:k2;if(t2.wt>=8&&!t2.wd){t2.wd=1;S.wn=(S.wn||0)+1;xp(5);toast("۸ لیوان! آفرین 💧");rain(["💧"])}}
+else if(a==="ispin")idea=Math.floor(Math.random()*ID.length);
+else if(a==="iadd"&&idea>=0){S.tk.push({id:S.tid++,t:ID[idea][1],w:"p",d:0});toast("به کارهات اضافه شد 🎉")}
+chk();sv();render();if(a==="plus"){var ti=$("#ti");if(ti)ti.focus()}});
+var tp=null;
+document.addEventListener("touchstart",function(e){var t=e.target.closest&&e.target.closest("#nv,.hd2");tp=t?{y:e.touches[0].clientY,n:!!(t.id==="nv")}:null},{passive:true});
+document.addEventListener("touchmove",function(e){if(!tp)return;var dy=e.touches[0].clientY-tp.y;if(tp.n&&dy<-30&&!shOpen){shOpen=1;tp=null;render()}else if(!tp.n&&dy>50&&shOpen){shOpen=0;tp=null;render()}},{passive:true});
+document.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="ti"){tadd();sv();render();var ti=$("#ti");if(ti)ti.focus()}});
+setInterval(tick,1000);apply();render();
+})();
+</script><script>if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})</script></body></html>
